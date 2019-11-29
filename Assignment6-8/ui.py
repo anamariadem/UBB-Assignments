@@ -190,13 +190,15 @@ class UI:
 
     def undo(self):
         try:
-            self._undoController.undo()
+            #self._undoController.undo()
+            self._service.undo()
         except ValueError as e:
             print(e)
 
     def redo(self):
         try:
-            self._undoController.redo()
+            self._service.redo()
+            #self._undoController.redo()
         except ValueError as e:
             print(e)
 
