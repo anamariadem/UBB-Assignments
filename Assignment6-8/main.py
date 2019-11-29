@@ -11,7 +11,7 @@ undoController = UndoController()
 studentService = StudentService(studentRepo,undoController)
 disciplineService = DisciplineService(disciplineRepo,undoController)
 gradeService = GradeService(gradeRepo,studentRepo,disciplineRepo,undoController)
-service = Service()
+service = Service(undoController)
 
 ui = UI(studentService,disciplineService,gradeService,service,undoController)
 
