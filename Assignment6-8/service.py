@@ -168,6 +168,14 @@ class GradeService:
 
 
 class Service:
+    def __init__(self, undoController):
+        self._undoController = undoController
+
+    def undo(self):
+        self._undoController.undo()
+
+    def redo(self):
+        self._undoController.redo()
 
     def failing_students(self, studentList, disciplineList, gradeList):
         '''
