@@ -11,9 +11,9 @@ class Student():
     def StudId(self):
         return self._id
 
-    @StudId.setter
+    '''@StudId.setter
     def StudId(self,value):
-        self.StudId = value
+        self.StudId = value'''
     @property
     def StudName(self):
         return self._name
@@ -34,6 +34,16 @@ class Student():
     def __str__(self):
         return  'ID:'.ljust(5)+ str(self.StudId).ljust(5) + ' Name: '.ljust(6)+ str(self.StudName)
 
+    @staticmethod
+    def readStudent(line):
+        params = line.split(",")
+        return Student(*params)
+    @staticmethod
+    def writeStudent(student):
+        return str(student._id) + "," + student._name
+
+
+
 
 class Discipline():
     def __init__(self, did, dname):
@@ -44,9 +54,9 @@ class Discipline():
     def DiscId(self):
         return self._id
 
-    @DiscId.setter
+    '''@DiscId.setter
     def DiscId(self,value):
-        self.DiscId = value
+        self.DiscId = value'''
 
     @property
     def DiscName(self):
@@ -65,6 +75,14 @@ class Discipline():
     def __str__(self):
         return 'ID: '.ljust(5) + str(self.DiscId).ljust(5)  + 'Name: '.ljust(6)+ str(self.DiscName)
 
+    @staticmethod
+    def readDiscipline(line):
+        params = line.split(",")
+        return Discipline(*params)
+    @staticmethod
+    def writeDiscipline(discipline):
+        return str(discipline._id) + "," + discipline._name
+
 
 class Grade():
     def __init__(self,studId, discId,grade):
@@ -76,17 +94,17 @@ class Grade():
     def StudId(self):
         return self._sid
 
-    @StudId.setter
+    '''''@StudId.setter
     def StudId(self,value):
-        self.StudId = value
+        self.StudId = value'''
 
     @property
     def DiscId(self):
         return self._did
 
-    @DiscId.setter
+    '''@DiscId.setter
     def DiscId(self, value):
-        self.DiscId = value
+        self.DiscId = value'''
 
     @property
     def GradeValue(self):
@@ -94,8 +112,17 @@ class Grade():
     @GradeValue.setter
     def GradeValue(self,value):
         if int(value) < 1 or int(value) > 10:
-            raise GradeValueException("Invalid grade")
+            raise GradeValueException("Invalid grade value")
         self._grade = value
 
     def __repr__(self):
         return 'Student ID: '.ljust(10) + str(self._sid).ljust(5)+ ' Discipline ID: ' + str(self._did).ljust(3) + " Grade: " + str(self._grade)
+
+    @staticmethod
+    def readGrade(line):
+        params = line.split(",")
+        return Grade(*params)
+    @staticmethod
+    def writeGrade(grade):
+        return str(grade._sid) + "," + str(grade._did) + "," + str(grade._grade)
+
