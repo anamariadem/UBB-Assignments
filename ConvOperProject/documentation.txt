@@ -1,0 +1,19 @@
+Problem statement:
+Implement a console-based application
+The application must implement algorithms for:
+	arithmetic operations for integers: addition, subtraction, multiplication and division by one digit, in a base
+p{2,3,...,9,10,16}
+	conversions of natural numbers between two bases p,q from {2,3,...,9,10,16} using the substitution method or successive
+divisions and rapid conversions between two bases p,q from{2, 4, 8, 16}.
+and  must have a menu such that all operations and conversion methods to be verified separately.
+
+This application is written using Python 3
+Types of data used:
+-'str'- In Python, Strings are arrays of bytes representing Unicode characters. However, Python does not have a character
+data type, a single character is simply a string with a length of 1. Square brackets can be used to access elements of
+the string.
+-'int'-int (signed integers) − They are often called just integers or ints. They are positive or negative whole numbers
+with no decimal point. Integers in Python 3 are of unlimited size.
+-objects of type Number defined in the domain - an object of type Number has 2 attributes: its base and its value
+
+The application is provided with specifications for all algorithms used.
