@@ -1,11 +1,14 @@
 from domain import *
 from exceptions import *
 from undoController import *
-class Repository:
-    def __init__(self,):
-        self._data = []
+from iterable_structure import *
+class Repository(Structure):
+    def __init__(self):
+        super().__init__()
+        #self._data = []
+        #self._data = Structure()
 
-    def add(self,object):
+    def add(self, object):
         '''
         adds a new object to the list
         :param object: the object to be added
@@ -87,12 +90,16 @@ class Repository:
     def __len__(self):
         return len(self._data)
 
-    def getAll(self):
-        return self._data
-
     def get_name(self,id):
+        '''
+        gets the name of an object based on its id
+        :param id: the give id
+        :return: the corresponding name
+        '''
         s = self.find(id)
         return s._name
+
+
 
 
 
@@ -153,6 +160,11 @@ class GradeRepository:
         return list
 
     def remove_one(self, grade):
+        '''
+        removes a single grade from the grade list
+        :param grade: the given grade
+        :return:
+        '''
         for g in self._grades:
             if g  == grade:
                 self._grades.remove(g)
@@ -165,6 +177,11 @@ class GradeRepository:
         return self._grades
 
     def addGrades(self,grades):
+        '''
+
+        :param grades:
+        :return:
+        '''
         for g in grades:
             self._grades.append(g)
 

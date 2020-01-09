@@ -3,7 +3,7 @@ from exceptions import *
 import operator
 import random
 from undoController import *
-class UI:
+class UI: # pragma: no cover
     def __init__(self, studentService, disciplineService, gradeService, service, undoController):
         self._studentService = studentService
         self._disciplineService = disciplineService
@@ -20,7 +20,6 @@ class UI:
             value = random.randint(1,10)
             grade = Grade(stud.StudId,disc.DiscId,value)
             self._gradeService._gradeRepo.add(grade,students,disciplies)
-
 
     def addStudent(self):
         id = int(input("Give student id: "))
@@ -89,14 +88,14 @@ class UI:
     def removeStudent(self):
         sid = int(input("Give student id: "))
         try:
-            self._gradeService.removeStudent("s",sid)
+            self._gradeService.removeStudent("s", sid)
         except StudentValueException as e:
             print(e)
 
     def removeDiscipline(self):
         did = int(input("Give discipline id: "))
         try:
-            self._gradeService.removeDiscipline("d",did)
+            self._gradeService.removeDiscipline("d", did)
         except StudentValueException as e:
             print(e)
 
@@ -156,10 +155,9 @@ class UI:
             studentList = self._studentService.getAll()
             disciplineList = self._disciplineService.getAll()
             gradeList = self._gradeService.getAll()
-            print(gradeList)
             list = self._service.failing_students(studentList,disciplineList,gradeList)
             for l in list:
-                print("Name: ".ljust(12) + l["Name"] + "Discipline: ".ljust(12) + l["Discipline"] + "Average: ".ljust(12) + str(l["Average"]))
+                print("Name: ".ljust(6) + l["Name"] + " Discipline: ".ljust(12) + l["Discipline"] + " Average: ".ljust(9) + str(l["Average"]))
                 print()
         except GradeValueException as e:
             print(e)
@@ -171,7 +169,7 @@ class UI:
             gradeList = self._gradeService.getAll()
             list = self._service.good_students(studentList, disciplineList, gradeList)
             for l in list:
-                print("Name: ".ljust(12) + l["Name"] + "Average: ".ljust(12)+ str(l["Average"]))
+                print("Name: ".ljust(6) + l["Name"] + " Average: ".ljust(9)+ str(l["Average"]))
                 print()
         except GradeValueException as e:
             print(e)
@@ -183,7 +181,7 @@ class UI:
             gradeList = self._gradeService.getAll()
             list = self._service.best_disciplines(studentList,disciplineList,gradeList)
             for l in list:
-                print("Name: ".ljust(12) + l["Name"] + "Average: ".ljust(12) + str(l["Average"]))
+                print("Name: ".ljust(6) + l["Name"] + " Average: ".ljust(9) + str(l["Average"]))
                 print()
         except GradeValueException as e:
             print(e)
@@ -202,15 +200,77 @@ class UI:
         except ValueError as e:
             print(e)
 
+    def sort_students_id(self):
+        while True:
+            sign = input("ascending/descending: ")
+            if sign == "ascending" or sign == "descending":
+                break
+            print("Invalid input")
+        self._studentService.sort(sign, "id")
+
+    def sort_students_name(self):
+        while True:
+            sign = input("ascending/descending: ")
+            if sign == "ascending" or sign == "descending":
+                break
+            print("Invalid input")
+        self._studentService.sort(sign, "name")
+
+    def sort_disciplines_id(self):
+        while True:
+            sign = input("ascending/descending: ")
+            if sign == "ascending" or sign == "descending":
+                break
+            print("Invalid input")
+        self._disciplineService.sort(sign, "id")
+
+    def sort_disciplines_name(self):
+        while True:
+            sign = input("ascending/descending: ")
+            if sign == "ascending" or sign == "descending":
+                break
+            print("Invalid input")
+        self._disciplineService.sort(sign, "name")
+
+    def filter_students(self):
+        while True:
+            sign = input("Give '<' or '>': ")
+            value = input("Give value: ")
+            try:
+                value = int(value)
+                if sign != '<' and sign != '>':
+                    print("Invalid input")
+                else:
+                    self._studentService.filter(sign, value)
+                    break
+            except Exception as e:
+                print(e)
+
+    def filter_disciplines(self):
+        while True:
+            sign = input("Give '<' or '>': ")
+            value = input("Give value: ")
+            try:
+                value = int(value)
+                if sign == "<" or sign == ">":
+                    self._disciplineService.filter(sign, value)
+                    break
+                else:
+                    print("Invalid input!")
+            except Exception as e:
+                print(e)
+
     def showStudents(self):
         students = self._studentService.getAll()
-        students.sort(key = lambda x: int(x._id))
+        #students.sort(key = lambda x: int(x._id))
+        self._studentService.sort("ascending", "id")
         for s in students:
             print(s)
 
     def showDisciplines(self):
         disciplines = self._disciplineService.getAll()
-        disciplines.sort(key = lambda x: int(x._id))
+        #disciplines.sort(key = lambda x: int(x._id))
+        self._disciplineService.sort("ascending", "id")
         for d in disciplines:
             print(d)
 
@@ -238,6 +298,12 @@ class UI:
         print('13. Show disciplines sorted in descending order of the average grade')
         print('14. Undo the last operation')
         print('15. Redo the last operation')
+        print('16. Sort the students by id')
+        print('17. Sort the students by name')
+        print('18. Sort the disciplines by id')
+        print('19. Sort the disciplines by name')
+        print('20. Filter students')
+        print('21. Filter disciplines')
         print('0.  Exit')
 
     def start(self):
@@ -280,13 +346,19 @@ class UI:
                 self.undo()
             elif choice == '15':
                 self.redo()
+            elif choice == '16':
+                self.sort_students_id()
+            elif choice == '17':
+                self.sort_students_name()
+            elif choice == '18':
+                self.sort_disciplines_id()
+            elif choice == '19':
+                self.sort_disciplines_name()
+            elif choice == '20':
+                self.filter_students()
+            elif choice == '21':
+                self.filter_disciplines()
             elif choice == '0':
                 return
             else:
                 print("Bad command")
-
-
-
-
-
-

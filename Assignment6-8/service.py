@@ -35,7 +35,7 @@ class StudentService:
             raise StudentValueException("ID is not in the list")
 
     def getAll(self):
-        return self._studentRepo.getAll()
+        return self._studentRepo
 
     def find(self, id):
         try:
@@ -54,7 +54,13 @@ class StudentService:
             s = Student(int(random.choice(list(open('ids.txt')))), random.choice(list(open('namess.txt'))).strip())
             while self._studentRepo.isDuplicate(s) == 0:
                 s = Student(int(random.choice(list(open('ids.txt')))), random.choice(list(open('namess.txt'))).strip())
-            self._studentRepo._data.append(s)
+            self._studentRepo.add(s)
+
+    def sort(self, sign, attribute):
+        self._studentRepo.sort(sign, attribute)
+
+    def filter(self, sign, value):
+        self._studentRepo.filter(sign, value)
 
 class DisciplineService:
     def __init__(self,disciplineRepo, undoController):
@@ -70,7 +76,7 @@ class DisciplineService:
             op = Operation(undo,redo)
             self._undoController.recordOperation(op)
         except StudentValueException:
-            raise DisciplineValueException("ID is bot in the list")
+            raise DisciplineValueException("Used ID")
 
     def modify_name(self,id,newName):
         try:
@@ -88,7 +94,7 @@ class DisciplineService:
             raise DisciplineValueException("ID is not in the list")
 
     def getAll(self):
-        return self._disciplineRepo.getAll()
+        return self._disciplineRepo
 
     def find(self, id):
         try:
@@ -107,7 +113,13 @@ class DisciplineService:
             d = Discipline(int(random.choice(list(open('idd.txt')))), random.choice(list(open('namesd.txt'))).strip())
             while self._disciplineRepo.isDuplicate(d) == 0:
                 d = Discipline(int(random.choice(list(open('idd.txt')))), random.choice(list(open('namesd.txt'))).strip())
-            self._disciplineRepo._data.append(d)
+            self._disciplineRepo.add(d)
+
+    def sort(self, sign, attribute):
+        self._disciplineRepo.sort(sign, attribute)
+
+    def filter(self, sign, value):
+        self._disciplineRepo.filter(sign, value)
 
 
 class GradeService:
@@ -118,15 +130,12 @@ class GradeService:
         self._undoController = undoController
 
     def add(self, sid,did,value , studentList, disciplineList):
-        try:
-            grade = Grade(sid,did,value)
-            self._gradeRepo.add(grade,studentList,disciplineList)
-            undo = FunctionCall(self._gradeRepo.remove_one, grade)
-            redo = FunctionCall(self.add, sid,did,value,studentList,disciplineList)
-            op = Operation(undo,redo)
-            self._undoController.recordOperation(op)
-        except GradeValueException:
-            raise GradeValueException("ID not found")
+        grade = Grade(sid, did, value)
+        self._gradeRepo.add(grade, studentList, disciplineList)
+        undo = FunctionCall(self._gradeRepo.remove_one, grade)
+        redo = FunctionCall(self.add, sid, did, value, studentList, disciplineList)
+        op = Operation(undo, redo)
+        self._undoController.recordOperation(op)
 
     def removeG(self,type, id):
         try:
@@ -265,3 +274,4 @@ class Service:
         else:
             l.sort(key=lambda x: x["Average"], reverse=True)
             return l
+
