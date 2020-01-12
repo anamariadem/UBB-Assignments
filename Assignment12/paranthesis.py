@@ -28,8 +28,6 @@ def backtrackingRec(list, index, n):
         if valid(list, index, n) == True:
             if index == n-1:
                 printing(list, n)
-                index = 0
-                list = [9] * 2* n
             elif index + 1 < n:
                 backtrackingRec(list, index+1, n)
                 #index += 1
