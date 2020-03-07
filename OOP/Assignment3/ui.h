@@ -17,10 +17,11 @@ void addGearUserInterface(UserInterface* ui, int inputCatalogueNumber, char* inp
 void removeGearUserInterface(UserInterface* ui, int inputCatalogueNumber);
 void updateGearUserInterface(UserInterface* ui, int inputCatalogueNumber, char* inputState, char* inputType, double inputValue);
 void printExistingGears(UserInterface* ui);
+void filterGears(UserInterface* ui, char* command);
 void listTheTypesOfExistingGears(UserInterface* ui);
 void listTheStatesOfExistingGears(UserInterface* ui);
 void listTheValuesOfExistingGears(UserInterface* ui);
 void readCommand(UserInterface* ui, char command[50], int* catalogueNumber, char state[20], char type[20], double* value);
 void start(UserInterface* ui);
-
+void runTests();
 #endif //ASSIGNMENT3_UI_H

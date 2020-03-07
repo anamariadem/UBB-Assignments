@@ -40,14 +40,25 @@ int getNumberOfExistingGearsService(Service* service){
     return getNumberOfExistingGears(service->repository);
 }
 
-void testService(){
+void testAddService(){
     Repository* repository= createRepository();
     Service* service = createService(repository);
     int statusOfAdd = addGearService(service,23, "used", "cogwheel", 65.07);
     assert(statusOfAdd == 0);
-    //addGearService(service, 25, "new", "wheel", 56.87);
+    destroyService(service);
+    destroyRepository(repository);
+}
+
+void testRemoveService(){
+    Repository* repository= createRepository();
+    Service* service = createService(repository);
+    addGearService(service,23, "used", "cogwheel", 65.07);
     int statusOfRemove = removeGearService(service, 23);
     assert(statusOfRemove == 0);
     destroyService(service);
     destroyRepository(repository);
+}
+void testService(){
+    testAddService();
+    testRemoveService();
 }

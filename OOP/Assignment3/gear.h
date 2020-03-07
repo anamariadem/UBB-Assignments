@@ -12,6 +12,13 @@ typedef struct {
     double value;
 }Gear;
 
+/*
+ creates an item of type gear
+ catalogueNumber - the given catalogue number
+ state - the given state
+ type - the given type
+ value - the given value
+ */
 Gear createItemOfTypeGear(int catalogueNumber, char state[], char type[], double value);
 int getCatalogueNumber(Gear gearItem);
 char* getStateOfGearItem(Gear* gearItem);

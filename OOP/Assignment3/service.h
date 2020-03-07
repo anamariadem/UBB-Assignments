@@ -18,6 +18,8 @@ int removeGearService(Service* service, int catalogueNumber);
 int updateGearService(Service* service, int catalogueNumber, char* state, char* type, double value);
 Gear* getListOfExistingGearsService(Service* service);
 int getNumberOfExistingGearsService(Service* service);
+void testAddService();
+void testRemoveService();
 void testService();
 
 #endif //ASSIGNMENT3_SERVICE_H

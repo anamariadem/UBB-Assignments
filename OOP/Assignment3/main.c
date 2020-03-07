@@ -5,9 +5,8 @@
 #include "ui.h"
 
 int main() {
-    testCreateGear();
-    testRepository();
-    testService();
+
+    runTests();
 
     Repository* repository = createRepository();
     Service* service = createService(repository);
