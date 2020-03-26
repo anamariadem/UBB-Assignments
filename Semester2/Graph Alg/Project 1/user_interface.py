@@ -19,6 +19,7 @@ class UI:
         print("11. Show the in degree of a vertex")
         print("12. Parse outbound edges of a vertex")
         print("13. Parse inbound edges of a vertex")
+        print("14. Retrieve the cost of an edge")
         print("0. Exit")
 
     def see_graph_you_have(self):
@@ -75,6 +76,14 @@ class UI:
         except ValueError as ve:
             print(ve)
 
+    def retrieve_cost(self):
+        try:
+            start = int(input("Give starting point: "))
+            end = int(input("Give end point: "))
+            self._repository.retrieve_cost(start, end)
+        except ValueError as ve:
+            print(ve)
+
     def show_number_of_vertices(self):
         print(str(self._repository.get_number_of_vertices()) + " vertices")
 
@@ -97,14 +106,20 @@ class UI:
                 print("Empty node " + str(key))
 
     def show_out_degree(self):
-        vertex = int(input("Give vertex: "))
-        out_degree = self._repository.get_out_degree(vertex)
-        print("In degree of vertex " + str(vertex) + " is " + str(out_degree))
+        try:
+            vertex = int(input("Give vertex: "))
+            out_degree = self._repository.get_out_degree(vertex)
+            print("Out degree of vertex " + str(vertex) + " is " + str(out_degree))
+        except ValueError as ve:
+            print(ve)
 
     def show_in_degree(self):
-        vertex = int(input("Give vertex: "))
-        in_degree = self._repository.get_in_degree(vertex)
-        print("In degree of vertex " + str(vertex) + " is " + str(in_degree))
+        try:
+            vertex = int(input("Give vertex: "))
+            in_degree = self._repository.get_in_degree(vertex)
+            print("In degree of vertex " + str(vertex) + " is " + str(in_degree))
+        except ValueError as ve:
+            print(ve)
 
     def parse_outbound_edges(self):
         vertex = int(input("Give vertex: "))
@@ -150,3 +165,5 @@ class UI:
                 self.parse_outbound_edges()
             elif command =='13':
                 self.parse_inbound_edges()
+            elif command == '14':
+                self.retrieve_cost()

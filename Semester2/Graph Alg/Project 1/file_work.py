@@ -1,5 +1,6 @@
 from graph_repr import *
 from random import *
+from copy import deepcopy
 
 class FileGraphs():
     def __init__(self, filename):
@@ -64,6 +65,11 @@ class FileGraphs():
         self.update_entities()
         self.__writeAllToFile()
 
+    def retrieve_cost(self, start, end):
+        self._graph.retrieve_cost(start, end)
+        self.update_entities()
+        self.__writeAllToFile()
+
     def modify_cost(self, start, end, new_cost):
         self._graph.modify_cost(start, end, new_cost)
         self.update_entities()
@@ -71,6 +77,9 @@ class FileGraphs():
 
     def getAll(self):
         return self._entities
+
+    def get_graph(self):
+        return deepcopy(self._graph)
 
     def get_dictOut(self):
         return self._graph.get_dictOut()
@@ -101,18 +110,15 @@ class FileGraphs():
 
 
 def add_edge_in_random_graph(number_of_vertices, graph):
-    try:
-        start = randint(0, number_of_vertices-1)
-        end = randint(0, number_of_vertices-1)
-        cost = randint(1, 100)
+    start = randint(0, number_of_vertices-1)
+    end = randint(0, number_of_vertices-1)
+    cost = randint(1, 100)
+    if(graph.isEdge(start, end) == False):
         graph.add_edge(start, end, cost)
-    except ValueError as ve:
-        add_edge_in_random_graph(number_of_vertices, graph)
-
 
 def create_random_graph():
     number_of_vertices = randint(1, 10)
-    number_of_edges = randint(1, 40)
+    number_of_edges = randint(4, 40)
 
     random_graph = DoubleDictGraph(number_of_vertices)
     for i in range(number_of_edges):
