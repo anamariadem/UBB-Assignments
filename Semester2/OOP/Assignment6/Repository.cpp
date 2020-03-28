@@ -15,6 +15,17 @@ int Repository::searchTurretByLocation(const std::string& location) {
     return -1;
 }
 
+int Repository::searchSavedTurretByLocation(const std::string &location) {
+    int position = 0;
+
+    for(auto& turret :  this->listOfSavedTurrets){
+        if(turret.getLocationOfTurret() == location)
+            return position;
+        position++;
+    }
+    return -1;
+}
+
 bool Repository::addTurretToRepository(const class NorvenTurret & turretToAdd) {
     if(this->searchTurretByLocation(turretToAdd.getLocationOfTurret()) != -1)
         return false;
@@ -29,6 +40,11 @@ bool Repository::removeTurretFromRepository(const std::string & location) {
         return false;
 
     this->listOfTurrets.deleteFromDynamicVector(indexInTurretList);
+
+    int indexInSavedTurretList = this->searchSavedTurretByLocation(location);
+    if(indexInSavedTurretList !=-1)
+        this->listOfSavedTurrets.deleteFromDynamicVector(indexInSavedTurretList);
+
     return true;
 }
 

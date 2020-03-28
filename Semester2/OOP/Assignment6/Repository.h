@@ -14,6 +14,7 @@ private:
     int currentIndexInListOfTurrets = 0;
 
     int searchTurretByLocation(const std::string& location);
+    int searchSavedTurretByLocation(const std::string& location);
 public:
     // default constructor
     Repository() {};
