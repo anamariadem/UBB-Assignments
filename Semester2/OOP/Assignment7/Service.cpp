@@ -45,17 +45,23 @@ bool Service::saveTurret(const std::string & location) {
     return this->repository.saveTurret(location);
 }
 
+
 std::vector<NorvenTurret> Service::getListOfTurretsWithAGivenSizeAndAtLeastAGivenNumberOfParts(const std::string & size, const int & separateParts) {
     if (this->applicationMode != "B")
         throw std::exception();
 
-    std::vector<NorvenTurret> turretsThatSatisfyTheCondition;
 
     std::vector<NorvenTurret> listOfTurrets = this->repository.getListOfTurrets();
 
+    std::vector<NorvenTurret> turretsThatSatisfyTheCondition(listOfTurrets.size());
+    /*
     for (auto &turret : listOfTurrets)
         if (turret.getSizeOfTurret() == size and turret.getNumberOfSeparatePartsOfTurret() >= separateParts)
-            turretsThatSatisfyTheCondition.push_back(turret);
+            turretsThatSatisfyTheCondition.push_back(turret);*/
+
+    auto iterator = std::copy_if(listOfTurrets.begin(), listOfTurrets.end(), turretsThatSatisfyTheCondition.begin(), [size, separateParts](const NorvenTurret& turret){ return turret.getSizeOfTurret() == size and turret.getNumberOfSeparatePartsOfTurret() >= separateParts;});
+
+    turretsThatSatisfyTheCondition.resize(std::distance(turretsThatSatisfyTheCondition.begin(), iterator));
 
     return turretsThatSatisfyTheCondition;
 }

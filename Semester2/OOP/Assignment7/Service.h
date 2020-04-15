@@ -6,6 +6,7 @@
 #define ASSIGNMENT7_SERVICE_H
 
 #include "Repository.h"
+#include <algorithm>
 
 class Service {
 private:
@@ -30,6 +31,7 @@ public:
     void moveToNextTurret();
 
     bool saveTurret(const std::string& location);
+
 
     std::vector<NorvenTurret> getListOfTurretsWithAGivenSizeAndAtLeastAGivenNumberOfParts(const std::string& size, const int& separateParts);
 

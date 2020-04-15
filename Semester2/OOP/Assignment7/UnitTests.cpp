@@ -147,6 +147,7 @@ void UnitTests::MoveToTheNextTurret_ResetsIndexToZero() {
 }
 
 void UnitTests::SaveTurret_ValidInput_SavesTheTurret() {
+    //at this point, the file contains 2 turrets with locations south-west and north-west
     FileRepository repository = FileRepository("testFile.csv");
     //NorvenTurret turretOne = NorvenTurret("south-west", "medium", 500, 3030, "stone tower");
     //NorvenTurret turretTwo{ "north-west", "large", 560, 3400, "wood tower"};
@@ -154,7 +155,8 @@ void UnitTests::SaveTurret_ValidInput_SavesTheTurret() {
     //repository.addTurret(turretTwo);
 
     bool statusOfSave = repository.saveTurret("south-west");
-    assert(statusOfSave == SUCCESS);
+    assert(repository.getListOfSavedTurrets().size() == 1);
+    //assert(statusOfSave == SUCCESS);
 }
 
 void UnitTests::SaveTurret_TurretAlreadySaved_ReturnsError() {
@@ -177,6 +179,7 @@ void UnitTests::SaveTurret_NonExistentTurret_ReturnsError() {
 }
 
 void UnitTests::DeleteTurret_ValidInput_DeleteFromSavedAndList() {
+    // at this point, file contains 2 turrets with locations south-west, north-west
     FileRepository repository = FileRepository("testFile.csv");
     NorvenTurret turret{"center", "small", 45, 4567, "tower"};
     repository.addTurret(turret);

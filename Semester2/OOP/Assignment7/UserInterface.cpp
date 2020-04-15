@@ -50,10 +50,13 @@ void UserInterface::addTurret() {
         bool statusOfAdd = this->service.addTurret(inputLocation, inputSize, inputAuraLevel, inputSeparateParts, inputVision);
         if(!statusOfAdd)
             std::cout<<"Turret already exists! :( \n";
-    } catch (std::exception&){
-        std::cout<<"Operation not allowed if not in mode A! :( \n";
-    }
+    } catch (std::invalid_argument&) {
+        std::cout<<"Please provide the correct type for parameters!\n";
+    }catch (std::exception&){
+            std::cout<<"Operation not allowed if not in mode A! :( \n";
+        }
 }
+
 
 void UserInterface::removeTurret() {
     try {
@@ -87,7 +90,9 @@ void UserInterface::updateTurret() {
         if(!statusOfUpdate)
             std::cout<< "Turret is not in the list! :(\n";
 
-    } catch (std::exception&){
+    } catch (std::invalid_argument&) {
+        std::cout<<"Please provide the correct type for parameters!\n";
+    }catch (std::exception&){
         std::cout<<"Operation not allowed if not in mode A! :( \n";
     }
 
@@ -152,7 +157,9 @@ void UserInterface::printListOfTurretsWithAGivenSizeAndAtLeastAGivenNumberOfPart
         for(auto& turret: listOfTurrets)
             std::cout<<turret<<"\n";
 
-    } catch (std::exception&){
+    } catch (std::invalid_argument&) {
+        std::cout<<"Please provide the correct type for parameters!\n";
+    }catch (std::exception&){
         std::cout<<"Operation not allowed if not in mode B! :( \n";
     }
 
@@ -163,14 +170,17 @@ void UserInterface::updateFile() {
     std::getline(std::cin, fileName);
     fileName = fileName.substr(1);
 
-    std::ofstream newFile{fileName, std::ios::out};
+    std::ofstream newFile{fileName, std::ios::app};
+    //std::ofstream newFile{fileName};
 
     std::string currentFileName = this->service.getFileName();
 
-    if(currentFileName!="") {
+    if(!currentFileName.empty()) {
+        //std::ofstream newFile{fileName, std::ios::app};
         std::vector<NorvenTurret> listOfTurrets = this->service.getAllTurretsInRepository();
         for (auto &turret:listOfTurrets)
             newFile << turret;
+        //newFile.close();
     }
     this->service.updateFile(fileName);
     newFile.close();

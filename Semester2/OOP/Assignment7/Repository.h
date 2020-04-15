@@ -12,7 +12,7 @@ class Repository{
 public:
     virtual int searchTurretByLocation(const std::string& location) = 0;
     virtual int searchSavedTurretByLocation(const std::string& location) = 0;
-    virtual void updateFile(const std::string& newFile)=0;
+    virtual void updateFile(const std::string& newFile) =0;
     virtual std::string getFilename()const = 0;
 
     virtual bool addTurret(const NorvenTurret& turretToAdd) = 0;

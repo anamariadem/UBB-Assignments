@@ -16,5 +16,6 @@ int main() {
     Service service{repo};
     UserInterface ui{service};
     ui.startApplication();
+
     return 0;
 }

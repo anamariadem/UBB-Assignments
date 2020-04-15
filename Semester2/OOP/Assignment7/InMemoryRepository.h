@@ -2,26 +2,26 @@
 // Created by Ana Maria on 10/04/2020.
 //
 
-#ifndef ASSIGNMENT7_FILEREPOSITORY_H
-#define ASSIGNMENT7_FILEREPOSITORY_H
+#ifndef ASSIGNMENT7_INMEMORYREPOSITORY_H
+#define ASSIGNMENT7_INMEMORYREPOSITORY_H
 
 #include "Repository.h"
-#include <fstream>
+#include "Turret.h"
 
-class FileRepository: public Repository {
+class InMemoryRepository : public Repository {
+
 private:
-    std::string fileName;
+    std::vector<NorvenTurret> listOfTurrets;
     std::vector<NorvenTurret> listOfSavedTurrets;
     int currentIndexInListOfTurrets = 0;
 
 private:
-    int searchTurretByLocation(const std::string& location) override ;
-    int searchSavedTurretByLocation(const std::string& location) override ;
-
+    int searchTurretByLocation(const std::string& location)override ;
+    int searchSavedTurretByLocation(const std::string& location)override ;
 public:
-    explicit FileRepository(const std::string& givenFileName) { this->fileName = givenFileName;}
-    void updateFile(const std::string& newFile) override {this->fileName = newFile;}
-    std::string getFilename()const override { return this->fileName;}
+    // default constructor
+    InMemoryRepository() {};
+
     /*
      adds a new turret to the repository
      returns true -> turret was added
@@ -55,15 +55,10 @@ public:
 
     int getCurrentIndexInListOfTurrets() const override { return this->currentIndexInListOfTurrets;}
 
-    std::vector<NorvenTurret> getListOfTurrets() const override;
+    std::vector<NorvenTurret> getListOfTurrets() const override { return  this->listOfTurrets; }
 
     std::vector<NorvenTurret> getListOfSavedTurrets() const override { return this->listOfSavedTurrets; }
-
-    friend std::vector<std::string> separate(const std::string& stringToBeSeparated, char delimiter);
-
-    std::vector<NorvenTurret>loadDataFromFile() const;
-    void loadDataToFile(const std::vector<NorvenTurret>& turrets);
 };
 
 
-#endif //ASSIGNMENT7_FILEREPOSITORY_H
+#endif //ASSIGNMENT7_INMEMORYREPOSITORY_H
