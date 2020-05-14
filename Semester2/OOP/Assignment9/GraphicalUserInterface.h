@@ -10,24 +10,44 @@
 #include <QListWidget>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QtCharts>
+#include <QBarSet>
 
 class GraphicalUserInterface: public QWidget {
 private:
     Service& service;
 
+    QTabWidget* tabWidget;
+    QWidget* administratorWidget;
+    QWidget* userWidget;
+    QWidget* analysisWidget;
+
+    QBarSeries* barSeries;
+    QChart* chart;
+    QBarCategoryAxis *axisX;
+    QValueAxis *axisY;
+    QChartView *chartView;
+
     QListWidget* listOfTurrets;
+    QListWidget* listOfSavedTurrets;
+    QLineEdit* currentTurret;
+    QLineEdit* anotherLocationLineEdit;
     QLineEdit* locationLineEdit;
     QLineEdit* sizeLineEdit;
     QLineEdit* auraLevelLineEdit;
     QLineEdit* separatePartsLineEdit;
     QLineEdit* visionLineEdit;
     QLineEdit* fileLineEdit;
+    QLineEdit* savedTurretsFileLineEdit;
     QLineEdit* modeLineEdit;
 
     QPushButton* addButton;
     QPushButton* deleteButton;
     QPushButton* setModeButton;
     QPushButton* updateFileButton;
+    QPushButton* updateSavedTurretsFileButton;
+    QPushButton* saveTurretButton;
+    QPushButton* moveButton;
     QPushButton* updateButton;
     QPushButton* undoButton;
     QPushButton* redoButton;
@@ -38,14 +58,19 @@ public:
 private:
       void initializeGraphicalInterface();
       void populateList();
+      void populateSavedList();
+      void createAnalysis();
       void connectSignalsAndSlots();
 
       int getSelectedIndex() const;
       void addTurret();
       void setMode();
       void updateFile();
+      void updateSavedTurretsFile();
       void deleteTurret();
       void updateTurret();
+      void saveTurret();
+      void moveToTheNextTurret();
       void undo();
       void redo();
       void clearFields();

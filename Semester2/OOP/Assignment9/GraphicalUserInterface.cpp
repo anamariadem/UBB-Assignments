@@ -4,46 +4,84 @@
 
 #include <QVBoxLayout>
 #include <qlayout.h>
+#include <QTabWidget>
 #include <QFormLayout>
 #include <QMessageBox>
+
 #include "GraphicalUserInterface.h"
 
 GraphicalUserInterface::GraphicalUserInterface(Service &serviceToBuild):service{serviceToBuild} {
     this->initializeGraphicalInterface();
+    this->createAnalysis();
     this->populateList();
+    this->populateSavedList();
     this->connectSignalsAndSlots();
 }
 
+
 void GraphicalUserInterface::initializeGraphicalInterface() {
+    //QTabWidget* tabWidget;
+    //    QWidget* administratorWidget;
+    this->tabWidget = new QTabWidget{};
+    this->administratorWidget = new QWidget{};
+    this->analysisWidget = new QWidget{};
+    this->userWidget = new QWidget{};
+
     this->listOfTurrets = new QListWidget{};
+    this->listOfSavedTurrets = new QListWidget{};
+    this->currentTurret = new QLineEdit{};
+    this->anotherLocationLineEdit = new QLineEdit{};
     this->locationLineEdit = new QLineEdit{};
     this->sizeLineEdit =  new QLineEdit{};
     this->auraLevelLineEdit = new QLineEdit{};
     this->separatePartsLineEdit =  new QLineEdit{};
     this->visionLineEdit =  new QLineEdit{};
     this->fileLineEdit = new QLineEdit{} ;
+    this->savedTurretsFileLineEdit = new QLineEdit{};
     this->modeLineEdit = new QLineEdit{};
     this->addButton = new QPushButton{"Add"};
     this->deleteButton = new QPushButton{"Delete"};
     this->setModeButton = new QPushButton{"Set Mode"};
     this->updateFileButton = new QPushButton{"Set file"};
+    this->updateSavedTurretsFileButton = new QPushButton{"Set file"};
+    this->saveTurretButton = new QPushButton{"Save"};
+    this->moveButton = new QPushButton{"Move"};
     this->updateButton = new QPushButton{"Update"};
     this->undoButton = new QPushButton{"Undo"};
     this->redoButton = new QPushButton{"Redo"};
 
-    QVBoxLayout* mainLayout = new QVBoxLayout{this};
-    mainLayout->addWidget(this->listOfTurrets);
+    QGridLayout* userLayout = new QGridLayout{this->userWidget};
+    userLayout->addWidget(this->listOfSavedTurrets, 0 ,0, 2,1);
+
+    QFormLayout* savedTurretsForm = new QFormLayout{};
+    savedTurretsForm->addRow("File", this->savedTurretsFileLineEdit);
+    savedTurretsForm->addRow("Location", this->anotherLocationLineEdit);
+    savedTurretsForm->addRow("Current Turret", this->currentTurret);
+
+    userLayout->addLayout(savedTurretsForm, 0,1,2,1);
+
+    QGridLayout* userButtonsLayout = new QGridLayout{};
+    userButtonsLayout->addWidget(this->updateSavedTurretsFileButton, 0,0,1,2);
+    userButtonsLayout->addWidget(this->saveTurretButton, 1,0);
+    userButtonsLayout->addWidget(this->moveButton, 1, 1);
+
+    userLayout->addLayout(userButtonsLayout, 1, 1);
+    QGridLayout* mainLayout = new QGridLayout{this->administratorWidget};
+
+    mainLayout->addWidget(this->listOfTurrets,0,0);
+
 
     QFormLayout* turretAttributesLayout = new QFormLayout{};
+    turretAttributesLayout->addRow("File", this->fileLineEdit);
+    turretAttributesLayout->addRow("Mode", this->modeLineEdit);
     turretAttributesLayout->addRow("Location", this->locationLineEdit);
     turretAttributesLayout->addRow("Size", this->sizeLineEdit);
     turretAttributesLayout->addRow("Aura Level", this->auraLevelLineEdit);
     turretAttributesLayout->addRow("Separate parts", this->separatePartsLineEdit);
     turretAttributesLayout->addRow("Vision", this->visionLineEdit);
-    turretAttributesLayout->addRow("Mode", this->modeLineEdit);
-    turretAttributesLayout->addRow("File", this->fileLineEdit);
 
-    mainLayout->addLayout(turretAttributesLayout);
+
+    mainLayout->addLayout(turretAttributesLayout,0,1, 2,1);
 
     QGridLayout* userCommandsLayout = new QGridLayout{};
     userCommandsLayout->addWidget(this->setModeButton, 0 , 0, 1, 2);
@@ -54,7 +92,44 @@ void GraphicalUserInterface::initializeGraphicalInterface() {
     userCommandsLayout->addWidget(this->undoButton, 4, 0);
     userCommandsLayout->addWidget(this->redoButton, 4, 1);
 
-    mainLayout->addLayout(userCommandsLayout);
+    mainLayout->addLayout(userCommandsLayout,1,0);
+
+
+    QHBoxLayout* tabLayout = new QHBoxLayout{this};
+    tabLayout->addWidget(this->tabWidget);
+    this->tabWidget->addTab(this->administratorWidget, "General");
+    this->tabWidget->addTab(this->userWidget, "User");
+    this->tabWidget->addTab(this->analysisWidget, "Analysis");
+
+    this->barSeries = new QBarSeries{};
+    this->chart = new QChart{};
+    this->axisX = new QBarCategoryAxis();
+    this->axisY = new QValueAxis{};
+    this->chartView = new QChartView(this->chart);
+
+    this->chart->addSeries(this->barSeries);
+    this->chart->setTitle(QString::fromStdString("Turret data analysis"));
+    this->chart->setAnimationOptions(QChart::SeriesAnimations);
+
+    QString locations = QString::fromStdString("locations");
+
+    this->axisX->append(locations);
+    this->chart->addAxis(axisX, Qt::AlignBottom);
+    this->barSeries->attachAxis(axisX);
+
+    this->axisY->setRange(0,500);
+    this->axisY->setTitleText(QString::fromStdString("Aura Level"));
+    this->chart->addAxis(axisY, Qt::AlignLeft);
+    this->barSeries->attachAxis(axisY);
+
+    this->chart->legend()->setVisible(true);
+    this->chart->legend()->setAlignment(Qt::AlignBottom);
+
+    this->chartView->setRenderHint(QPainter::Antialiasing);
+
+    QVBoxLayout* analysisLayout = new QVBoxLayout{this->analysisWidget};
+    analysisLayout->addWidget(this->chartView);
+
 }
 
 void GraphicalUserInterface::populateList() {
@@ -87,6 +162,10 @@ void GraphicalUserInterface::connectSignalsAndSlots() {
     QObject::connect(this->undoButton, &QPushButton::clicked, this, &GraphicalUserInterface::undo);
     QObject::connect(this->redoButton, &QPushButton::clicked, this, &GraphicalUserInterface::redo);
     QObject::connect(this->updateButton, &QPushButton::clicked, this, &GraphicalUserInterface::updateTurret);
+
+    QObject::connect(this->updateSavedTurretsFileButton, &QPushButton::clicked, this, &GraphicalUserInterface::updateSavedTurretsFile);
+    QObject::connect(this->saveTurretButton, &QPushButton::clicked, this, &GraphicalUserInterface::saveTurret);
+    QObject::connect(this->moveButton, &QPushButton::clicked, this, &GraphicalUserInterface::moveToTheNextTurret);
 }
 
 int GraphicalUserInterface::getSelectedIndex() const {
@@ -123,6 +202,8 @@ void GraphicalUserInterface::  addTurret() {
     int lastElement = this->service.getAllTurretsInRepository().size()-1;
     this->listOfTurrets->setCurrentRow(lastElement);
 
+    this->createAnalysis();
+
     this->clearFields();
 }
 
@@ -142,6 +223,7 @@ void GraphicalUserInterface::updateFile() {
     this->service.updateAllTurretsFile(fileName);
     this->fileLineEdit->clear();
     this->populateList();
+    this->createAnalysis();
 }
 
 void GraphicalUserInterface::deleteTurret() {
@@ -158,6 +240,7 @@ void GraphicalUserInterface::deleteTurret() {
         QMessageBox::critical(this, "Delete Error", exception.what());
     }
     this->populateList();
+    this->createAnalysis();
 }
 
 void GraphicalUserInterface::undo() {
@@ -167,6 +250,7 @@ void GraphicalUserInterface::undo() {
         QMessageBox::critical(this, "Undo Error", exception.what());
     }
     this->populateList();
+    this->createAnalysis();
 }
 
 void GraphicalUserInterface::redo() {
@@ -176,6 +260,7 @@ void GraphicalUserInterface::redo() {
         QMessageBox::critical(this, "Redo Error", exception.what());
     }
     this->populateList();
+    this->createAnalysis();
 }
 
 void GraphicalUserInterface::updateTurret() {
@@ -203,6 +288,7 @@ void GraphicalUserInterface::updateTurret() {
 
     this->clearFields();
     this->populateList();
+    this->createAnalysis();
 }
 
 void GraphicalUserInterface::clearFields() {
@@ -211,4 +297,55 @@ void GraphicalUserInterface::clearFields() {
     this->auraLevelLineEdit->clear();
     this->separatePartsLineEdit->clear();
     this->visionLineEdit->clear();
+}
+
+void GraphicalUserInterface::createAnalysis() {
+    auto turretsFromRepository = this->service.getAllTurretsInRepository();
+    //this->barSeries = new QBarSeries{};
+    //this->chart = new QChart{};
+    this->barSeries->clear();
+    for(auto& turret: turretsFromRepository){
+        QBarSet* currentSet = new QBarSet(QString::fromStdString(turret.getLocationOfTurret()));
+        *currentSet << turret.getAuraLevelOfTurret();
+        this->barSeries->append(currentSet);
+    }
+
+}
+
+void GraphicalUserInterface::populateSavedList() {
+    this->listOfSavedTurrets->clear();
+
+    auto turrets = this->service.getAllSavedTurrets();
+    for(auto& turret:turrets){
+        this->listOfSavedTurrets->addItem(QString::fromStdString(turret.toString()));
+    }
+}
+
+void GraphicalUserInterface::updateSavedTurretsFile() {
+    std::string fileName = this->savedTurretsFileLineEdit->text().toStdString();
+    this->service.updateSavedTurretsFile(fileName);
+    this->savedTurretsFileLineEdit->clear();
+    this->populateSavedList();
+}
+
+void GraphicalUserInterface::saveTurret() {
+    std::string location = this->anotherLocationLineEdit->text().toStdString();
+    try {
+        this->service.saveTurret(location);
+    }catch (MyException& exception){
+        QMessageBox::critical(this, "Mode Error", exception.what());
+    }
+
+    this->populateSavedList();
+}
+
+void GraphicalUserInterface::moveToTheNextTurret() {
+    auto turrets = this->service.getAllTurretsInRepository();
+    try {
+        this->service.moveToNextTurret();
+        auto index = this->service.getCurrentIndexInListOfTurrets();
+        this->currentTurret->setText(QString::fromStdString(turrets[index].getLocationOfTurret()));
+    }catch (MyException& exception){
+        QMessageBox::critical(this, "Mode Error", exception.what());
+    }
 }
