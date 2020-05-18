@@ -30,8 +30,11 @@ private:
 
     QListWidget* listOfTurrets;
     QListWidget* listOfSavedTurrets;
+    QListWidget* listOfTurretsWithProperty;
     QLineEdit* currentTurret;
     QLineEdit* anotherLocationLineEdit;
+    QLineEdit* anotherSizeLineEdit;
+    QLineEdit* anotherPartsLineEdit;
     QLineEdit* locationLineEdit;
     QLineEdit* sizeLineEdit;
     QLineEdit* auraLevelLineEdit;
@@ -51,6 +54,7 @@ private:
     QPushButton* updateButton;
     QPushButton* undoButton;
     QPushButton* redoButton;
+    QPushButton* showButton;
 
 public:
     GraphicalUserInterface(Service& serviceToBuild);
@@ -71,6 +75,7 @@ private:
       void updateTurret();
       void saveTurret();
       void moveToTheNextTurret();
+      void showTurretsWithProperties();
       void undo();
       void redo();
       void clearFields();

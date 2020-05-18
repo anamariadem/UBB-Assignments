@@ -31,6 +31,8 @@ void GraphicalUserInterface::initializeGraphicalInterface() {
     this->listOfSavedTurrets = new QListWidget{};
     this->currentTurret = new QLineEdit{};
     this->anotherLocationLineEdit = new QLineEdit{};
+    this->anotherSizeLineEdit = new QLineEdit{};
+    this->anotherPartsLineEdit = new QLineEdit{};
     this->locationLineEdit = new QLineEdit{};
     this->sizeLineEdit =  new QLineEdit{};
     this->auraLevelLineEdit = new QLineEdit{};
@@ -49,14 +51,19 @@ void GraphicalUserInterface::initializeGraphicalInterface() {
     this->updateButton = new QPushButton{"Update"};
     this->undoButton = new QPushButton{"Undo"};
     this->redoButton = new QPushButton{"Redo"};
+    this->showButton = new QPushButton{"Show turrets with properties"};
+    this->listOfTurretsWithProperty = new QListWidget{};
 
     QGridLayout* userLayout = new QGridLayout{this->userWidget};
-    userLayout->addWidget(this->listOfSavedTurrets, 0 ,0, 2,1);
+    userLayout->addWidget(this->listOfSavedTurrets, 0 ,0);
+    userLayout->addWidget(this->listOfTurretsWithProperty, 1, 0);
 
     QFormLayout* savedTurretsForm = new QFormLayout{};
     savedTurretsForm->addRow("File", this->savedTurretsFileLineEdit);
     savedTurretsForm->addRow("Location", this->anotherLocationLineEdit);
     savedTurretsForm->addRow("Current Turret", this->currentTurret);
+    savedTurretsForm->addRow("Size", this->anotherSizeLineEdit);
+    savedTurretsForm->addRow("Separate parts", this->anotherPartsLineEdit);
 
     userLayout->addLayout(savedTurretsForm, 0,1,2,1);
 
@@ -64,6 +71,7 @@ void GraphicalUserInterface::initializeGraphicalInterface() {
     userButtonsLayout->addWidget(this->updateSavedTurretsFileButton, 0,0,1,2);
     userButtonsLayout->addWidget(this->saveTurretButton, 1,0);
     userButtonsLayout->addWidget(this->moveButton, 1, 1);
+    userButtonsLayout->addWidget(this->showButton, 2,0,1,2);
 
     userLayout->addLayout(userButtonsLayout, 1, 1);
     QGridLayout* mainLayout = new QGridLayout{this->administratorWidget};
@@ -166,6 +174,7 @@ void GraphicalUserInterface::connectSignalsAndSlots() {
     QObject::connect(this->updateSavedTurretsFileButton, &QPushButton::clicked, this, &GraphicalUserInterface::updateSavedTurretsFile);
     QObject::connect(this->saveTurretButton, &QPushButton::clicked, this, &GraphicalUserInterface::saveTurret);
     QObject::connect(this->moveButton, &QPushButton::clicked, this, &GraphicalUserInterface::moveToTheNextTurret);
+    QObject::connect(this->showButton, &QPushButton::clicked, this, &GraphicalUserInterface::showTurretsWithProperties);
 }
 
 int GraphicalUserInterface::getSelectedIndex() const {
@@ -337,6 +346,7 @@ void GraphicalUserInterface::saveTurret() {
     }
 
     this->populateSavedList();
+    this->anotherLocationLineEdit->clear();
 }
 
 void GraphicalUserInterface::moveToTheNextTurret() {
@@ -348,4 +358,21 @@ void GraphicalUserInterface::moveToTheNextTurret() {
     }catch (MyException& exception){
         QMessageBox::critical(this, "Mode Error", exception.what());
     }
+}
+
+void GraphicalUserInterface::showTurretsWithProperties() {
+    std::string size = this->anotherSizeLineEdit->text().toStdString();
+    int separateParts = std::stoi(this->anotherPartsLineEdit->text().toStdString());
+
+
+    try {
+        auto turrets = this->service.getListOfTurretsWithAGivenSizeAndAtLeastAGivenNumberOfParts(size, separateParts);
+        for(auto& turret:turrets)
+            this->listOfTurretsWithProperty->addItem(QString::fromStdString(turret.toString()));
+    }catch (MyException& exception){
+        QMessageBox::critical(this, "Mode Error", exception.what());
+    }
+    this->anotherSizeLineEdit->clear();
+    this->anotherPartsLineEdit->clear();
+
 }
