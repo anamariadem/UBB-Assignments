@@ -26,19 +26,26 @@ private:
     std::stack<std::unique_ptr<Action>> undoStack;
     std::stack<std::unique_ptr<Action>> redoStack;
 
+    std::stack<std::unique_ptr<Action>> undoStackMyList;
+    std::stack<std::unique_ptr<Action>> redoStackMyList;
+
 private:
     static FileRepository* createTurretRepositoryBasedOnFileExtension(const std::string &newFileName);
 public:
     // constructor
     //Service(Repository* repositoryToBuild, Repository* savedRepoToBuild): turretRepository{repositoryToBuild }, applicationMode {"C" }, savedTurretRepository{savedRepoToBuild} {}
 
-    Service(){this->turretRepository = new InMemoryRepository, this->savedTurretRepository = new InMemoryRepository;}
+    //Service(){this->turretRepository = new InMemoryRepository, this->savedTurretRepository = new InMemoryRepository;}
+
+    Service(Repository* repository, Repository* savedRepository): turretRepository{repository}, savedTurretRepository{savedRepository} {}
 
     void updateAllTurretsFile(const std::string & newFileName);
 
     void updateSavedTurretsFile(const std::string & newFileNam);
 
-    std::string getFileName() const;
+    std::string getAllTurretsFileName() const;
+
+    std::string getSavedTurretsFileName() const;
 
     void setApplicationMode(std::string& newMode);
 
@@ -63,6 +70,10 @@ public:
     void undo();
 
     void redo();
+
+    void undoMyList();
+
+    void redoMyList();
 
     ~Service();
 };

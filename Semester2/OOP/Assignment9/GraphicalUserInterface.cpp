@@ -7,10 +7,14 @@
 #include <QTabWidget>
 #include <QFormLayout>
 #include <QMessageBox>
+#include <iostream>
+#include <QtCore>
+#include <QFileSystemWatcher>
 
 #include "GraphicalUserInterface.h"
 
-GraphicalUserInterface::GraphicalUserInterface(Service &serviceToBuild):service{serviceToBuild} {
+GraphicalUserInterface::GraphicalUserInterface(TurretsTableModel* modelToBuild, Service &serviceToBuild):service{serviceToBuild} {
+    this->turretsTableModel = modelToBuild;
     this->initializeGraphicalInterface();
     this->createAnalysis();
     this->populateList();
@@ -26,7 +30,9 @@ void GraphicalUserInterface::initializeGraphicalInterface() {
     this->administratorWidget = new QWidget{};
     this->analysisWidget = new QWidget{};
     this->userWidget = new QWidget{};
+    this->secondWindowForMyList = new QWidget{};
 
+    this->myListTableView = new QTableView{this->secondWindowForMyList};
     this->listOfTurrets = new QListWidget{};
     this->listOfSavedTurrets = new QListWidget{};
     this->currentTurret = new QLineEdit{};
@@ -51,7 +57,12 @@ void GraphicalUserInterface::initializeGraphicalInterface() {
     this->updateButton = new QPushButton{"Update"};
     this->undoButton = new QPushButton{"Undo"};
     this->redoButton = new QPushButton{"Redo"};
+    this->undoMyListButton = new QPushButton{"Undo"};
+    this->redoMyListButton = new QPushButton{"Redo"};
     this->showButton = new QPushButton{"Show turrets with properties"};
+    this->openMainFile = new QPushButton{"Open"};
+    this->openSavedFile = new QPushButton{"Open"};
+    this->openSecondWindowButton = new QPushButton{"Open second window"};
     this->listOfTurretsWithProperty = new QListWidget{};
 
     QGridLayout* userLayout = new QGridLayout{this->userWidget};
@@ -68,10 +79,14 @@ void GraphicalUserInterface::initializeGraphicalInterface() {
     userLayout->addLayout(savedTurretsForm, 0,1,2,1);
 
     QGridLayout* userButtonsLayout = new QGridLayout{};
-    userButtonsLayout->addWidget(this->updateSavedTurretsFileButton, 0,0,1,2);
+    userButtonsLayout->addWidget(this->updateSavedTurretsFileButton, 0,0);
+    userButtonsLayout->addWidget(this->openSavedFile, 0,1);
     userButtonsLayout->addWidget(this->saveTurretButton, 1,0);
     userButtonsLayout->addWidget(this->moveButton, 1, 1);
     userButtonsLayout->addWidget(this->showButton, 2,0,1,2);
+    userButtonsLayout->addWidget(this->undoMyListButton, 3,0);
+    userButtonsLayout->addWidget(this->redoMyListButton,3, 1);
+    userButtonsLayout->addWidget(this->openSecondWindowButton, 4, 0,1,2);
 
     userLayout->addLayout(userButtonsLayout, 1, 1);
     QGridLayout* mainLayout = new QGridLayout{this->administratorWidget};
@@ -93,7 +108,8 @@ void GraphicalUserInterface::initializeGraphicalInterface() {
 
     QGridLayout* userCommandsLayout = new QGridLayout{};
     userCommandsLayout->addWidget(this->setModeButton, 0 , 0, 1, 2);
-    userCommandsLayout->addWidget(this->updateFileButton, 1, 0, 1, 2);
+    userCommandsLayout->addWidget(this->updateFileButton, 1, 0);
+    userCommandsLayout->addWidget(this->openMainFile, 1,1);
     userCommandsLayout->addWidget(this->addButton, 2, 0);
     userCommandsLayout->addWidget(this->deleteButton, 2 ,1);
     userCommandsLayout->addWidget(this->updateButton, 3,0, 1,2);
@@ -138,18 +154,48 @@ void GraphicalUserInterface::initializeGraphicalInterface() {
     QVBoxLayout* analysisLayout = new QVBoxLayout{this->analysisWidget};
     analysisLayout->addWidget(this->chartView);
 
+    QVBoxLayout* secondWindowLayout = new QVBoxLayout{this->secondWindowForMyList};
+    secondWindowLayout->addWidget(this->myListTableView);
+
+    this->myListTableView->setModel(this->turretsTableModel);
+    this->myListTableView->update();
+
 }
 
 void GraphicalUserInterface::populateList() {
     this->listOfTurrets->clear();
 
     auto turrets = this->service.getAllTurretsInRepository();
+    QFont font{};
+    font.setWeight(QFont::Bold);
     for(auto& turret:turrets){
-         this->listOfTurrets->addItem(QString::fromStdString(turret.toString()));
+        QListWidgetItem* item = new QListWidgetItem{};
+        item->setText(QString::fromStdString(turret.toString()));
+        if(turret.getLocationOfTurret() == "north") {
+            item->setFont(font);
+            this->listOfTurrets->addItem(item);
+        }else{
+            font.setWeight(QFont::Normal);
+            item->setFont(font);
+            this->listOfTurrets->addItem(item);
+        }
     }
 }
 
 void GraphicalUserInterface::connectSignalsAndSlots() {
+
+    QShortcut* undoShortcut = new QShortcut{QKeySequence("CTRL+Z"), this->administratorWidget};
+    QShortcut* redoShortcut = new QShortcut{QKeySequence("CTRL+Y"), this->administratorWidget};
+
+    QObject::connect(undoShortcut, &QShortcut::activated, this, &GraphicalUserInterface::undo);
+    QObject::connect(redoShortcut, &QShortcut::activated, this, &GraphicalUserInterface::redo);
+
+    QShortcut* undoMyListShortcut = new QShortcut{QKeySequence("CTRL+Z"), this->userWidget};
+    QShortcut* redoMyListShortcut = new QShortcut{QKeySequence("CTRL+Y"), this->userWidget};
+
+    QObject::connect(undoMyListShortcut, &QShortcut::activated, this, &GraphicalUserInterface::undoMyList);
+    QObject::connect(redoMyListShortcut, &QShortcut::activated, this, &GraphicalUserInterface::redoMyList);
+
     QObject::connect(this->listOfTurrets, &QListWidget::itemSelectionChanged, [this](){
         int selectedIndex = this->getSelectedIndex();
         if(selectedIndex < 0)
@@ -175,6 +221,24 @@ void GraphicalUserInterface::connectSignalsAndSlots() {
     QObject::connect(this->saveTurretButton, &QPushButton::clicked, this, &GraphicalUserInterface::saveTurret);
     QObject::connect(this->moveButton, &QPushButton::clicked, this, &GraphicalUserInterface::moveToTheNextTurret);
     QObject::connect(this->showButton, &QPushButton::clicked, this, &GraphicalUserInterface::showTurretsWithProperties);
+
+    QObject::connect(this->openMainFile, &QPushButton::clicked, this, &GraphicalUserInterface::openAllTurretsFile);
+    QObject::connect(this->openSavedFile, &QPushButton::clicked, this, &GraphicalUserInterface::openSavedTurretsFile);
+
+    QObject::connect(this->undoMyListButton, &QPushButton::clicked, this, &GraphicalUserInterface::undoMyList);
+    QObject::connect(this->redoMyListButton, &QPushButton::clicked, this, &GraphicalUserInterface::redoMyList);
+
+    QObject::connect(this->openSecondWindowButton, &QPushButton::clicked, this, &GraphicalUserInterface::openSecondWindow);
+
+
+    /*std::string fileName = this->service.getSavedTurretsFileName();
+    QStringList paths;
+    paths.push_back(QString::fromStdString(fileName));
+    if (!fileName.empty()){
+        auto fileCheck = QFileSystemWatcher(paths);
+        //QObject::connect(fileCheck, &QFileSystemWatcher::fileChanged, this, &GraphicalUserInterface::populateSavedList);
+    }*/
+
 }
 
 int GraphicalUserInterface::getSelectedIndex() const {
@@ -192,6 +256,9 @@ int GraphicalUserInterface::getSelectedIndex() const {
 }
 
 void GraphicalUserInterface::  addTurret() {
+    /*std::string fileName = this->service.getAllTurretsFileName();
+    if(fileName.empty())
+        QMessageBox::critical(this, "File Error", "No file was provided");*/
     std::string location = this->locationLineEdit->text().toStdString();
     std::string size = this->sizeLineEdit->text().toStdString();
     std::string auraLevelAsString = this->auraLevelLineEdit->text().toStdString();
@@ -228,11 +295,19 @@ void GraphicalUserInterface::setMode() {
 }
 
 void GraphicalUserInterface::updateFile() {
-    std::string fileName = this->fileLineEdit->text().toStdString();
-    this->service.updateAllTurretsFile(fileName);
-    this->fileLineEdit->clear();
-    this->populateList();
-    this->createAnalysis();
+    try {
+        std::string fileName = this->fileLineEdit->text().toStdString();
+        //QMessageBox::critical(this, "Mode Error", QString::fromStdString(fileName));
+        this->service.updateAllTurretsFile(fileName);
+        std::ofstream newFile{fileName, std::ios::app};
+        newFile.close();
+        this->fileLineEdit->clear();
+        this->populateList();
+        this->createAnalysis();
+    }catch (MyException& exception){
+        QMessageBox::critical(this, "File Error", exception.what());
+    }
+
 }
 
 void GraphicalUserInterface::deleteTurret() {
@@ -243,7 +318,7 @@ void GraphicalUserInterface::deleteTurret() {
     }
 
     NorvenTurret turret = this->service.getAllTurretsInRepository()[selectedIndex];
-    try {
+        try {
         this->service.removeTurret(turret.getLocationOfTurret());
     }catch (MyException& exception){
         QMessageBox::critical(this, "Delete Error", exception.what());
@@ -322,22 +397,35 @@ void GraphicalUserInterface::createAnalysis() {
 }
 
 void GraphicalUserInterface::populateSavedList() {
+    this->myListTableView->update();
     this->listOfSavedTurrets->clear();
-
     auto turrets = this->service.getAllSavedTurrets();
+    if(turrets.empty())
+        return;
+    //int row = 0;
     for(auto& turret:turrets){
         this->listOfSavedTurrets->addItem(QString::fromStdString(turret.toString()));
     }
 }
 
 void GraphicalUserInterface::updateSavedTurretsFile() {
-    std::string fileName = this->savedTurretsFileLineEdit->text().toStdString();
-    this->service.updateSavedTurretsFile(fileName);
-    this->savedTurretsFileLineEdit->clear();
-    this->populateSavedList();
+    try {
+        std::string fileName = this->savedTurretsFileLineEdit->text().toStdString();
+        //QMessageBox::critical(this, "Mode Error", QString::fromStdString(fileName));
+        this->service.updateSavedTurretsFile(fileName);
+        std::ofstream newFile{fileName, std::ios::app};
+        newFile.close();
+        this->savedTurretsFileLineEdit->clear();
+        this->populateSavedList();
+        this->myListTableView->update();
+    }catch (MyException& exception){
+        QMessageBox::critical(this, "File Error", exception.what());
+    }
+
 }
 
 void GraphicalUserInterface::saveTurret() {
+    //this->myListTableView->reset();
     std::string location = this->anotherLocationLineEdit->text().toStdString();
     try {
         this->service.saveTurret(location);
@@ -346,6 +434,7 @@ void GraphicalUserInterface::saveTurret() {
     }
 
     this->populateSavedList();
+    this->myListTableView->setModel(this->turretsTableModel);
     this->anotherLocationLineEdit->clear();
 }
 
@@ -375,4 +464,49 @@ void GraphicalUserInterface::showTurretsWithProperties() {
     this->anotherSizeLineEdit->clear();
     this->anotherPartsLineEdit->clear();
 
+}
+
+void GraphicalUserInterface::openSavedTurretsFile() {
+    //this->myListTableView->reset();
+    std::string fileName = this->service.getSavedTurretsFileName();
+    if(!fileName.empty())
+        system(("open \"" + fileName + "\"").c_str());
+    else
+        QMessageBox::critical(this, "File Error", "No file to open");
+
+}
+
+void GraphicalUserInterface::openAllTurretsFile() {
+    std::string fileName = this->service.getAllTurretsFileName();
+    if(!fileName.empty())
+        system(("open \"" + fileName + "\"").c_str());
+    else
+        QMessageBox::critical(this, "File Error", "No file to open");
+}
+
+void GraphicalUserInterface::redoMyList() {
+    try {
+        this->service.redoMyList();
+    }catch (MyException& exception){
+        QMessageBox::critical(this, "Redo Error", exception.what());
+    }
+    this->populateSavedList();
+}
+
+void GraphicalUserInterface::undoMyList() {
+    try {
+        this->service.undoMyList();
+    }catch (MyException& exception){
+        QMessageBox::critical(this, "Undo Error", exception.what());
+    }
+    this->populateSavedList();
+}
+
+void GraphicalUserInterface::openSecondWindow() {
+    //this->secondWindowForMyList->setModal(true);
+    //this->secondWindowForMyList->exec();
+    //this->turretsTableModel->removeRows(0, this->turretsTableModel->rowCount());
+    //this->myListTableView->setModel(this->turretsTableModel);
+    //this->myListTableView.
+    this->secondWindowForMyList->show();
 }

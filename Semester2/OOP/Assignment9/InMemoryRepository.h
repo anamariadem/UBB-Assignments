@@ -44,6 +44,8 @@ public:
 
     std::vector<NorvenTurret> getListOfTurrets() const override { return  this->listOfTurrets; }
 
+    ~InMemoryRepository(){}
+
 };
 
 

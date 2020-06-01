@@ -7,6 +7,7 @@
 
 #include <qWidget.h>
 #include "Service.h"
+#include "TurretsTableModel.h"
 #include <QListWidget>
 #include <QLineEdit>
 #include <QPushButton>
@@ -16,11 +17,15 @@
 class GraphicalUserInterface: public QWidget {
 private:
     Service& service;
+    TurretsTableModel* turretsTableModel;
 
     QTabWidget* tabWidget;
     QWidget* administratorWidget;
     QWidget* userWidget;
     QWidget* analysisWidget;
+    QWidget* secondWindowForMyList;
+
+    QTableView* myListTableView;
 
     QBarSeries* barSeries;
     QChart* chart;
@@ -54,10 +59,15 @@ private:
     QPushButton* updateButton;
     QPushButton* undoButton;
     QPushButton* redoButton;
+    QPushButton* undoMyListButton;
+    QPushButton* redoMyListButton;
     QPushButton* showButton;
+    QPushButton* openMainFile;
+    QPushButton* openSavedFile;
+    QPushButton* openSecondWindowButton;
 
 public:
-    GraphicalUserInterface(Service& serviceToBuild);
+    GraphicalUserInterface(TurretsTableModel* modelToBuild, Service& serviceToBuild);
 
 private:
       void initializeGraphicalInterface();
@@ -76,9 +86,14 @@ private:
       void saveTurret();
       void moveToTheNextTurret();
       void showTurretsWithProperties();
+      void openAllTurretsFile();
+      void openSavedTurretsFile();
       void undo();
       void redo();
+      void undoMyList();
+      void redoMyList();
       void clearFields();
+      void openSecondWindow();
 };
 
 

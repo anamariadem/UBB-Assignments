@@ -27,3 +27,11 @@ void ActionUpdate::executeUndo() {
 void ActionUpdate::executeRedo() {
     this->repository->updateTurret(this->afterUpdatedTurret.getLocationOfTurret(), this->afterUpdatedTurret.getSizeOfTurret(), this->afterUpdatedTurret.getAuraLevelOfTurret(), this->afterUpdatedTurret.getNumberOfSeparatePartsOfTurret(), this->afterUpdatedTurret.getVisionOfTurret());
 }
+
+void ActionSave::executeUndo() {
+    this->repository->removeTurret(this->savedTurret.getLocationOfTurret());
+}
+
+void ActionSave::executeRedo() {
+    this->repository->addTurret(this->savedTurret);
+}

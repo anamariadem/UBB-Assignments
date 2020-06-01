@@ -6,7 +6,7 @@
 
 std::vector<NorvenTurret> TextFileRepository::loadDataFromFile() const{
     if(this->fileName.empty())
-        throw MyException("No file was provided! :(\n");
+        return std::vector<NorvenTurret>();
 
     std::ifstream file{this->fileName};
 
@@ -23,7 +23,7 @@ std::vector<NorvenTurret> TextFileRepository::loadDataFromFile() const{
 
 void TextFileRepository::loadDataToFile(const std::vector<NorvenTurret>& turretsToLoad) {
     if(this->fileName.empty())
-        throw MyException("No file was provided! :(\n");
+        return;
 
     std::ofstream file(this->fileName, std::ios::out);
 
@@ -71,6 +71,9 @@ int TextFileRepository::searchSavedTurretByLocation(const std::string &location)
 }*/
 
 void TextFileRepository::addTurret(const NorvenTurret &turretToAdd) {
+    if(this->fileName.empty())
+        throw MyException("No file was provided");
+
     if(this->searchTurretByLocation(turretToAdd.getLocationOfTurret()) != -1)
         throw MyException("Turret already exists! :(\n");
 
@@ -83,6 +86,9 @@ void TextFileRepository::addTurret(const NorvenTurret &turretToAdd) {
 }
 
 void TextFileRepository::removeTurret(const std::string &location) {
+    if(this->fileName.empty())
+        throw MyException("No file was provided");
+
     int indexInTurretList = this->searchTurretByLocation(location);
     if(indexInTurretList == -1)
         throw MyException("Turret does not exist! :(\n");
@@ -98,6 +104,9 @@ void TextFileRepository::removeTurret(const std::string &location) {
 }
 
 void TextFileRepository::updateTurret(const std::string &location, const std::string &newSize, const int &newAuraLevel, const int &newNumberOfSeparatedParts, const std::string &newVision) {
+    if(this->fileName.empty())
+        throw MyException("No file was provided");
+
     int indexInTurretList = this->searchTurretByLocation(location);
     if(indexInTurretList == -1)
         throw MyException("Turret does not exist! :(\n");

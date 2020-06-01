@@ -118,24 +118,20 @@ void UserInterface::printSavedTurrets() {
 
 void UserInterface::openFileWithCorrectApplication(){
     std::string fileName;
-    std::getline(std::cin, fileName);
-    fileName = fileName.substr(1);
-    
-    system(("\"" + fileName + "\"").c_str());
+    /*std::getline(std::cin, fileName);
+    fileName = fileName.substr(1);*/
+
+    std::string userInput;
+    std::getline(std::cin, userInput);
+    if(userInput.substr(1) == "list")
+        fileName = this->service.getAllTurretsFileName();
+    else if (userInput.substr(1) == "mylist")
+        fileName = this->service.getSavedTurretsFileName();
+
+    if(!fileName.empty())
+        system(("open \"" + fileName + "\"").c_str());
     //system(("open " + "\" "+ fileName + "\"").c_str());
 
-    /*auto indexOfLastDot = fileName.find_last_of('.');
-    std::string fileExtension = fileName.substr(indexOfLastDot);
-
-    if (fileExtension == ".txt" or fileExtension == ".csv") {
-        std::string command = "notepad.exe ";
-        command += fileName;
-        system(command.c_str());
-    }
-   else if (fileExtension == ".html") {
-        std::string quotes = "\"";
-        system((quotes + fileName + quotes).c_str());
-   }*/
  }
 
 void UserInterface::moveToNextTurret() {
@@ -198,7 +194,7 @@ void UserInterface::updateAllTurretsFile() {
     std::ofstream newFile{fileName, std::ios::app};
 
 
-    /*std::string currentFileName = this->service.getFileName();
+    /*std::string currentFileName = this->service.getAllTurretsFileName();
 
     if(!currentFileName.empty()) {
         //std::ofstream newFile{fileName, std::ios::app};

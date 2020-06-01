@@ -3,6 +3,7 @@
 //
 
 #include "Service.h"
+#include <iostream>
 
 void Service::setApplicationMode(std::string& newMode) {
     if(newMode!="A" && newMode!="B")
@@ -41,9 +42,18 @@ FileRepository* Service::createTurretRepositoryBasedOnFileExtension(const std::s
 }
 
 
-std::string Service::getFileName() const {
-    auto* pointerToFileRepository = dynamic_cast<TextFileRepository*>(this->turretRepository);
-    return pointerToFileRepository->getFilename();
+std::string Service::getAllTurretsFileName() const {
+    auto* pointerToFileRepository = dynamic_cast<FileRepository*>(this->turretRepository);
+    if(pointerToFileRepository != nullptr)
+        return pointerToFileRepository->getFilename();
+    return std::string();
+}
+
+std::string Service::getSavedTurretsFileName() const {
+    auto* pointerToFileRepository = dynamic_cast<FileRepository*>(this->savedTurretRepository);
+    if(pointerToFileRepository != nullptr)
+        return pointerToFileRepository->getFilename();
+    return std::string();
 }
 
 void Service::addTurret(const std::string & location, const std::string & size, const int & auraLevel, const int & separateParts, const std::string & vision) {
@@ -110,11 +120,19 @@ void Service::moveToNextTurret() {
 }
 
 void Service::saveTurret(const std::string & location) {
-    //std::string message = "Operation not allowed if not in mode B! :( \n";
+    while(!this->redoStackMyList.empty()){
+        this->redoStackMyList.pop();
+    }
     if(this->applicationMode != "B")
         throw MyException("Invalid operation unless in mode B! :(\n");
-
+    NorvenTurret turret = this->turretRepository->findTurretByLocation(location);
     this->savedTurretRepository->addTurret(this->turretRepository->findTurretByLocation(location));
+
+    //std::unique_ptr<Action> actionRemove = std::make_unique<ActionRemove>(turret, this->turretRepository);
+    //    this->undoStack.push(std::move(actionRemove));
+    std::unique_ptr<Action> actionSave = std::make_unique<ActionSave>(turret, this->savedTurretRepository);
+    this->undoStackMyList.push(std::move(actionSave));
+
 }
 
 
@@ -139,6 +157,8 @@ std::vector<NorvenTurret> Service::getListOfTurretsWithAGivenSizeAndAtLeastAGive
 }
 
 void Service::undo() {
+    if(this->applicationMode != "A")
+        throw MyException("Invalid operation unless in mode A! :(\n");
     if(this->undoStack.empty())
         throw MyException("No more undos! :( \n");
     this->undoStack.top()->executeUndo();
@@ -147,6 +167,8 @@ void Service::undo() {
 }
 
 void Service::redo(){
+    if(this->applicationMode != "A")
+        throw MyException("Invalid operation unless in mode A! :(\n");
     if(this->redoStack.empty())
         throw MyException("No more redos! :( \n");
     this->redoStack.top()->executeRedo();
@@ -157,6 +179,26 @@ void Service::redo(){
 Service::~Service() {
     delete this->turretRepository;
     delete this->savedTurretRepository;
+}
+
+void Service::undoMyList() {
+    if (this->applicationMode != "B")
+        throw MyException("Invalid operation unless in mode B! :(\n");
+    if(this->undoStackMyList.empty())
+        throw MyException("No more undos! :( \n");
+    this->undoStackMyList.top()->executeUndo();
+    this->redoStackMyList.push(std::move(this->undoStackMyList.top()));
+    this->undoStackMyList.pop();
+}
+
+void Service::redoMyList() {
+    if (this->applicationMode != "B")
+        throw MyException("Invalid operation unless in mode B! :(\n");
+    if(this->redoStackMyList.empty())
+        throw MyException("No more redos! :( \n");
+    this->redoStackMyList.top()->executeRedo();
+    this->undoStackMyList.push(std::move(this->redoStackMyList.top()));
+    this->redoStackMyList.pop();
 }
 
 

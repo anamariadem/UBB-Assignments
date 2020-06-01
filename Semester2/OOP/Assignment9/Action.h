@@ -50,4 +50,15 @@ public:
     void executeUndo() override;
     void executeRedo() override;
 };
+
+class ActionSave : public Action{
+private:
+    NorvenTurret savedTurret;
+    Repository* repository;
+public:
+    ActionSave(NorvenTurret turret, Repository* givenRepository): savedTurret{std::move(turret)}, repository{givenRepository} {}
+    void executeUndo() override;
+    void executeRedo() override;
+
+};
 #endif //ASSIGNMENT8_REMASTERED_ACTION_H

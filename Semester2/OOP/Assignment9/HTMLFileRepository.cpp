@@ -2,6 +2,7 @@
 // Created by Ana Maria on 24/04/2020.
 //
 
+#include <iostream>
 #include "HTMLFileRepository.h"
 
 std::vector<NorvenTurret> HTMLFileRepository::loadDataFromFile() const {
@@ -9,6 +10,8 @@ std::vector<NorvenTurret> HTMLFileRepository::loadDataFromFile() const {
         throw MyException("No file was provided! :(\n");
 
     std::ifstream file{this->fileName};
+    if(file.eof())
+        return std::vector<NorvenTurret>();
 
     std::vector<NorvenTurret> turretsFromFile;
     std::string buffer, location, size, vision;
@@ -105,6 +108,8 @@ int HTMLFileRepository::searchTurretByLocation(const std::string &location) {
 
 
 void HTMLFileRepository::addTurret(const NorvenTurret &turretToAdd) {
+    if(this->fileName.empty())
+        throw MyException("No file was provided");
     if(this->searchTurretByLocation(turretToAdd.getLocationOfTurret()) != -1)
         throw MyException("Turret already exists! :(\n");
 
@@ -114,6 +119,8 @@ void HTMLFileRepository::addTurret(const NorvenTurret &turretToAdd) {
 }
 
 void HTMLFileRepository::removeTurret(const std::string &location) {
+    if(this->fileName.empty())
+        throw MyException("No file was provided");
     int indexInTurretList = this->searchTurretByLocation(location);
     if(indexInTurretList == -1)
         throw MyException("Turret does not exist! :(\n");
@@ -129,6 +136,8 @@ void HTMLFileRepository::removeTurret(const std::string &location) {
 }
 
 void HTMLFileRepository::updateTurret(const std::string &location, const std::string &newSize, const int &newAuraLevel, const int &newNumberOfSeparatedParts, const std::string &newVision) {
+    if(this->fileName.empty())
+        throw MyException("No file was provided");
     int indexInTurretList = this->searchTurretByLocation(location);
     if(indexInTurretList == -1)
         throw MyException("Turret does not exist! :(\n");

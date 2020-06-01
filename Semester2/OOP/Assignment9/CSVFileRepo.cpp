@@ -56,6 +56,8 @@ int CSVFileRepository::searchTurretByLocation(const std::string &location) {
 
 
 void CSVFileRepository::addTurret(const NorvenTurret &turretToAdd) {
+    if(this->fileName.empty())
+        throw MyException("No file was provided");
     if(this->searchTurretByLocation(turretToAdd.getLocationOfTurret()) != -1)
         throw MyException("Turret already exists! :(\n");
 
@@ -68,6 +70,8 @@ void CSVFileRepository::addTurret(const NorvenTurret &turretToAdd) {
 }
 
 void CSVFileRepository::removeTurret(const std::string &location) {
+    if(this->fileName.empty())
+        throw MyException("No file was provided");
     int indexInTurretList = this->searchTurretByLocation(location);
     if(indexInTurretList == -1)
         throw MyException("Turret does not exist! :(\n");
@@ -83,6 +87,8 @@ void CSVFileRepository::removeTurret(const std::string &location) {
 }
 
 void CSVFileRepository::updateTurret(const std::string &location, const std::string &newSize, const int &newAuraLevel, const int &newNumberOfSeparatedParts, const std::string &newVision) {
+    if(this->fileName.empty())
+        throw MyException("No file was provided");
     int indexInTurretList = this->searchTurretByLocation(location);
     if(indexInTurretList == -1)
         throw MyException("Turret does not exist! :(\n");
