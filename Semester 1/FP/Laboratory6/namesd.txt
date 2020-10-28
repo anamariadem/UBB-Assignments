@@ -1,0 +1,5 @@
+Algebra
+Math Analysis
+Fundamentals of programming
+Computational logic
+Computer Architecture
