@@ -1,0 +1,12 @@
+  PID TTY           TIME CMD
+43355 ttys000    0:00.03 /Users/anamaria/Applications/iTerm.app/Contents/MacOS/iTerm2 --server login -fp anamaria
+43357 ttys000    0:00.08 -zsh
+43604 ttys000    0:00.01 ./server
+43606 ttys000    0:00.00 (server)
+43610 ttys000    0:00.00 ./server
+43611 ttys000    0:00.01 /bin/sh -c ps > cv.txt
+43439 ttys001    0:00.09 /Users/anamaria/Applications/iTerm.app/Contents/MacOS/iTerm2 --server login -fp anamaria
+43446 ttys001    0:00.08 -zsh
+43609 ttys001    0:00.03 /Library/Frameworks/Python.framework/Versions/3.8/Resources/Python.app/Contents/MacOS/Python client.py
+43350 ttys002    0:00.07 /Users/anamaria/Applications/iTerm.app/Contents/MacOS/iTerm2 --server login -fp anamaria
+43352 ttys002    0:00.06 -zsh
