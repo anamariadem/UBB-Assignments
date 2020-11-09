@@ -1,0 +1,27 @@
+Students
+
+Each “student” will read from the command line a port number group_port and an integer that states if the student is
+the group leader (1) or not (0).
+
+The group leader periodically (from 5 to 5 seconds) sends the message “leader” the port group_port using broadcast to
+ notify the students that he/she is the group leader.
+
+The other students will send their questions (a string), randomly from 3 to 3 seconds to the group leader (i.e. from 3
+to 3 seconds, generate a random number between 0 and 1; if it is larger than 0.5 compose a random string and send it;
+otherwise do nothing). You can choose if you want to use TCP or UDP for this.
+
+The group leader will “forward” these questions to the teacher using TCP. When the teacher responds, the group leader
+will send the original question and the teacher’s response on the port group_port using broadcast.
+
+Teacher
+
+The teacher is the “server”; using select and TCP communication it waits for questions from the group leaders. The
+group leaders know the IP and the port that the teacher listens on.
+
+When a question is received, the sever generates the response (a string and an array of integers – the string and the
+values in this array should be randomly generated) and sends back the response to the group leader.
+
+Create at least 3 groups with minimum 5 students each.
+
+
+teacher <- leader ->  studenti
