@@ -1,11 +1,11 @@
 package Model.Expressions;
 
 import Exceptions.DivisionByZero;
-import Exceptions.MyException;
-import Model.ADTs.MyDictionary;
+import Exceptions.InterpreterException;
 import Model.ADTs.MyDictionaryInterface;
+import Model.ADTs.MyHeapInterface;
 import Model.Values.Value;
 
 public interface Expression {
-    Value evaluate(MyDictionaryInterface<String, Value> table) throws MyException, DivisionByZero;
+    Value evaluate(MyDictionaryInterface<String, Value> table, MyHeapInterface<Value> heap) throws InterpreterException;
 }

@@ -1,6 +1,6 @@
 package Model.Statements;
 
-import Exceptions.MyException;
+import Exceptions.InterpreterException;
 import Model.ADTs.MyStackInterface;
 import Model.ProgramState;
 
@@ -12,11 +12,11 @@ public class CompoundStatement implements Statement{
         this.firstStatement = firstStatement;
         this.secondStatement = secondStatement;
     }
-    public ProgramState execute(ProgramState state) throws MyException{
+    public ProgramState execute(ProgramState state) throws InterpreterException {
         MyStackInterface<Statement> stack = state.getExecutionStack();
         stack.push(this.secondStatement);
         stack.push(this.firstStatement);
-        state.setExecutionStack(stack);
+        //state.setExecutionStack(stack);
         return state;
     }
 

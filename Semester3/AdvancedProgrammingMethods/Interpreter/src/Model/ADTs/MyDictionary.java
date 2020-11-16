@@ -1,10 +1,10 @@
 package Model.ADTs;
 
-import Exceptions.EmptyCollectionException;
+import Exceptions.InterpreterException;
 
-import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class MyDictionary<K,V> implements MyDictionaryInterface<K,V> {
     HashMap<K,V> dictionary;
@@ -21,14 +21,24 @@ public class MyDictionary<K,V> implements MyDictionaryInterface<K,V> {
         return this.dictionary.get(key);
     }
 
+    public void set(Map<K, V> newContent) {
+        dictionary.clear();
+        for (K i : newContent.keySet()) {
+            dictionary.put(i, newContent.get(i));
+        }
+    }
 
-    public void remove(K key) throws EmptyCollectionException {
+    public Set<K> keySet() {
+        return dictionary.keySet();
+    }
+
+    public void remove(K key) throws InterpreterException {
         if(this.dictionary.isEmpty())
-            throw new EmptyCollectionException("Dictionary is empty");
+            throw new InterpreterException("Dictionary is empty");
         this.dictionary.remove(key);
     }
 
-    public boolean isVariableDefined(K key){
+    public boolean containsKey(K key){
         return this.dictionary.containsKey(key);
     }
 

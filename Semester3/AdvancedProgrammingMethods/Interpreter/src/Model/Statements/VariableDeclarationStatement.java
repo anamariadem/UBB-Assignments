@@ -1,14 +1,12 @@
 package Model.Statements;
 
 import Exceptions.DivisionByZero;
-import Exceptions.MyException;
+import Exceptions.InterpreterException;
 import Exceptions.TypesDoNotMatch;
 import Exceptions.VariableDefinitionException;
 import Model.ADTs.MyDictionaryInterface;
 import Model.ProgramState;
-import Model.Types.BoolType;
-import Model.Types.IntType;
-import Model.Types.Type;
+import Model.Types.*;
 import Model.Values.BoolValue;
 import Model.Values.IntValue;
 import Model.Values.Value;
@@ -22,20 +20,13 @@ public class VariableDeclarationStatement implements Statement{
         this.variableType = variableType;
     }
 
-    public ProgramState execute(ProgramState state) throws MyException, DivisionByZero, VariableDefinitionException, TypesDoNotMatch{
+    public ProgramState execute(ProgramState state) throws InterpreterException{
         MyDictionaryInterface<String, Value> symbolTable = state.getSymbolTable();
 
-        if(symbolTable.isVariableDefined(this.variableName))
-            throw new VariableDefinitionException("Variable is already defined");
-        else {
-            if(this.variableType.equals(new IntType()))
-                symbolTable.add(this.variableName, new IntValue());
-            else if(this.variableType.equals(new BoolType())){
-                symbolTable.add(this.variableName, new BoolValue());
-            }else throw new VariableDefinitionException("Invalid type");
-        }
+        if(symbolTable.containsKey(this.variableName))
+            throw new InterpreterException("Variable is already defined");
 
-        state.setSymbolTable(symbolTable);
+        symbolTable.add(this.variableName, variableType.getDefault());
         return state;
     }
 

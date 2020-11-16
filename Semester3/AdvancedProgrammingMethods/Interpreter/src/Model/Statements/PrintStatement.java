@@ -1,9 +1,7 @@
 package Model.Statements;
 
-import Exceptions.DivisionByZero;
-import Exceptions.MyException;
+import Exceptions.InterpreterException;
 import Model.ADTs.MyListInterface;
-import Model.ADTs.MyStackInterface;
 import Model.Expressions.Expression;
 import Model.ProgramState;
 import Model.Values.Value;
@@ -15,11 +13,10 @@ public class PrintStatement implements Statement{
         this.expression = expression;
     }
 
-    public ProgramState execute(ProgramState state) throws MyException, DivisionByZero {
-        //MyStackInterface<Statement> stack = state.getExecutionStack();
+    public ProgramState execute(ProgramState state) throws InterpreterException{
         MyListInterface<Value> outputConsole = state.getOutputConsole();
-        outputConsole.add(this.expression.evaluate(state.getSymbolTable()));
-        state.setOutputConsole(outputConsole);
+        outputConsole.add(this.expression.evaluate(state.getSymbolTable(), state.getHeap()));
+
         return state;
     }
 

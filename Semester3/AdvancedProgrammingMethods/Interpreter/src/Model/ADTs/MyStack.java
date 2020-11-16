@@ -2,6 +2,7 @@ package Model.ADTs;
 
 
 import Exceptions.EmptyCollectionException;
+import Exceptions.InterpreterException;
 
 import java.util.Stack;
 
@@ -12,9 +13,9 @@ public class MyStack<T> implements MyStackInterface<T>{
         this.stack = new Stack<T>();
     }
 
-    public T pop() throws EmptyCollectionException {
+    public T pop() throws InterpreterException {
         if(this.stack.empty())
-            throw new EmptyCollectionException("Stack is empty");
+            throw new InterpreterException("Stack is empty");
         return this.stack.pop();
     }
     public void push(T elementToPush){

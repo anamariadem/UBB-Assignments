@@ -1,8 +1,10 @@
 package Model.ADTs;
 
 import Exceptions.EmptyCollectionException;
+import Exceptions.InterpreterException;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class MyList<T> implements MyListInterface<T>{
     LinkedList<T> listOfElements;
@@ -18,9 +20,9 @@ public class MyList<T> implements MyListInterface<T>{
         this.listOfElements.add(position, element);
     }
 
-    public void remove(T element) throws EmptyCollectionException {
+    public void remove(T element) throws InterpreterException {
         if(this.listOfElements.isEmpty())
-            throw new EmptyCollectionException("List is empty");
+            throw new InterpreterException("List is empty");
         this.listOfElements.remove(element);
     }
 

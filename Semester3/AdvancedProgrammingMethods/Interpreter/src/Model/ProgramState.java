@@ -1,22 +1,28 @@
 package Model;
 
-import Model.ADTs.MyDictionaryInterface;
-import Model.ADTs.MyListInterface;
-import Model.ADTs.MyStackInterface;
+import Model.ADTs.*;
 import Model.Statements.Statement;
 import Model.Values.Value;
+
+import java.io.BufferedReader;
 
 public class ProgramState {
     private MyStackInterface<Statement> executionStack;
     private MyDictionaryInterface<String, Value> symbolTable;
     private MyListInterface<Value> outputConsole;
+    private MyDictionaryInterface<String, BufferedReader> fileTable;
+    private MyHeapInterface<Value> heap;
     private final Statement originalProgram;
 
-    public ProgramState(MyStackInterface<Statement> executionStack, MyDictionaryInterface<String, Value> symbolTable, MyListInterface<Value> outputConsole, Statement originalProgram){
-        this.executionStack = executionStack;
-        this.symbolTable = symbolTable;
-        this.outputConsole = outputConsole;
+    public ProgramState(Statement originalProgram){
+        this.executionStack = new MyStack<>();
+        this.symbolTable = new MyDictionary<>();
+        this.outputConsole = new MyList<>();
+        this.fileTable = new MyDictionary<>();
+        this.heap = new MyHeap<>();
         this.originalProgram = originalProgram;
+        if(originalProgram != null)
+            executionStack.push(originalProgram);
     }
 
     public MyStackInterface<Statement> getExecutionStack(){
@@ -47,6 +53,22 @@ public class ProgramState {
         return originalProgram;
     }
 
+    public MyDictionaryInterface<String, BufferedReader> getFileTable() {
+        return fileTable;
+    }
+
+    public void setFileTable(MyDictionaryInterface<String, BufferedReader> fileTable) {
+        this.fileTable = fileTable;
+    }
+
+    public MyHeapInterface<Value> getHeap() {
+        return heap;
+    }
+
+    public void setHeap(MyHeapInterface<Value> heap) {
+        this.heap = heap;
+    }
+
     public String toString(){
         return " -------- Execution Stack -------- \n" +
                 executionStack.toString() + "\n" +
@@ -54,6 +76,10 @@ public class ProgramState {
                 symbolTable.toString() + '\n' +
                 " -------- Output Console-------- \n" +
                 outputConsole.toString() + '\n' +
+                " -------- File Table-------- \n" +
+                fileTable.toString() + '\n' +
+                " -------- Heap -------- \n" +
+                heap.toString() + '\n' +
                 " ------------------------------- \n\n";
     }
 

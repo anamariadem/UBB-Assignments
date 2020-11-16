@@ -18,17 +18,16 @@ public class IfStatement implements Statement {
         this.thenStatement = thenStatement;
         this.elseStatement = elseStatement;
     }
-    public ProgramState execute(ProgramState state) throws MyException, DivisionByZero, VariableDefinitionException, TypesDoNotMatch, InvalidDataType {
+    public ProgramState execute(ProgramState state) throws InterpreterException{
         MyStackInterface<Statement> stack = state.getExecutionStack();
-        Value evaluation = this.expression.evaluate(state.getSymbolTable());
+        Value evaluation = this.expression.evaluate(state.getSymbolTable(), state.getHeap());
         if(evaluation.getType().equals(new BoolType())){
             if(evaluation.equals(new BoolValue(true)))
                 stack.push(this.thenStatement);
             else
                 stack.push(this.elseStatement);
-        }else throw new InvalidDataType("Condition does not evaluate to boolean type");
+        }else throw new InterpreterException("Condition does not evaluate to boolean type");
 
-        state.setExecutionStack(stack);
         return state;
     }
 

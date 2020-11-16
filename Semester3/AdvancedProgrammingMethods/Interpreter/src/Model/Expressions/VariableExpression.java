@@ -1,8 +1,8 @@
 package Model.Expressions;
 
-import Exceptions.MyException;
-import Model.ADTs.MyDictionary;
+import Exceptions.InterpreterException;
 import Model.ADTs.MyDictionaryInterface;
+import Model.ADTs.MyHeapInterface;
 import Model.Values.Value;
 
 public class VariableExpression implements Expression{
@@ -12,7 +12,7 @@ public class VariableExpression implements Expression{
         this.variable = variable;
     }
 
-    public Value evaluate(MyDictionaryInterface<String, Value> table) throws MyException{
+    public Value evaluate(MyDictionaryInterface<String, Value> table, MyHeapInterface<Value> heap) throws InterpreterException {
         return table.getElementWithKey(this.variable);
     }
 
