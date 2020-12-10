@@ -1,0 +1,148 @@
+Program id: 1
+ -------- Execution Stack -------- 
+[int v ; v = 2 ; print(v)]
+ -------- Symbol  Table -------- 
+
+ -------- Output Console-------- 
+
+ -------- File Table-------- 
+
+ -------- Heap -------- 
+
+ ------------------------------- 
+
+
+Program id: 1
+ -------- Execution Stack -------- 
+[v = 2 ; print(v), int v]
+ -------- Symbol  Table -------- 
+
+ -------- Output Console-------- 
+
+ -------- File Table-------- 
+
+ -------- Heap -------- 
+
+ ------------------------------- 
+
+
+Program id: 1
+ -------- Execution Stack -------- 
+[v = 2 ; print(v), int v]
+ -------- Symbol  Table -------- 
+
+ -------- Output Console-------- 
+
+ -------- File Table-------- 
+
+ -------- Heap -------- 
+
+ ------------------------------- 
+
+
+Program id: 1
+ -------- Execution Stack -------- 
+[v = 2 ; print(v)]
+ -------- Symbol  Table -------- 
+v->0
+
+ -------- Output Console-------- 
+
+ -------- File Table-------- 
+
+ -------- Heap -------- 
+
+ ------------------------------- 
+
+
+Program id: 1
+ -------- Execution Stack -------- 
+[v = 2 ; print(v)]
+ -------- Symbol  Table -------- 
+v->0
+
+ -------- Output Console-------- 
+
+ -------- File Table-------- 
+
+ -------- Heap -------- 
+
+ ------------------------------- 
+
+
+Program id: 1
+ -------- Execution Stack -------- 
+[print(v), v = 2]
+ -------- Symbol  Table -------- 
+v->0
+
+ -------- Output Console-------- 
+
+ -------- File Table-------- 
+
+ -------- Heap -------- 
+
+ ------------------------------- 
+
+
+Program id: 1
+ -------- Execution Stack -------- 
+[print(v), v = 2]
+ -------- Symbol  Table -------- 
+v->0
+
+ -------- Output Console-------- 
+
+ -------- File Table-------- 
+
+ -------- Heap -------- 
+
+ ------------------------------- 
+
+
+Program id: 1
+ -------- Execution Stack -------- 
+[print(v)]
+ -------- Symbol  Table -------- 
+v->2
+
+ -------- Output Console-------- 
+
+ -------- File Table-------- 
+
+ -------- Heap -------- 
+
+ ------------------------------- 
+
+
+Program id: 1
+ -------- Execution Stack -------- 
+[print(v)]
+ -------- Symbol  Table -------- 
+v->2
+
+ -------- Output Console-------- 
+
+ -------- File Table-------- 
+
+ -------- Heap -------- 
+
+ ------------------------------- 
+
+
+Program id: 1
+ -------- Execution Stack -------- 
+[]
+ -------- Symbol  Table -------- 
+v->2
+
+ -------- Output Console-------- 
+2
+
+ -------- File Table-------- 
+
+ -------- Heap -------- 
+
+ ------------------------------- 
+
+
