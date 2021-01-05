@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="GUI.ProgramExecutionController"
+            alignment="CENTER">
+<children>
+    <TextField fx:id="numberOfProgramStatesTextField"
+               GridPane.columnSpan="3"
+               GridPane.rowIndex="0"
+               GridPane.columnIndex="0"/>
+
+    <Label text="HeapTable" GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.halignment="CENTER"/>
+
+    <TableView fx:id="heapTableView"
+               GridPane.rowIndex="2"
+               GridPane.columnIndex="0">
+        <columns>
+            <TableColumn fx:id="variableAddressColumn" text="Address" />
+            <TableColumn fx:id="valueTableColumn" text="Value" />
+        </columns>
+
+    </TableView>
+
+    <Label text="SymbolTable" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.halignment="CENTER"/>
+    <TableView fx:id="symbolTableView"
+               GridPane.rowIndex="2"
+               GridPane.columnIndex="1">
+
+        <columns>
+            <TableColumn fx:id="variableNameColumn" text="Variable name" />
+            <TableColumn fx:id="variableValueColumn" text="Variable value" />
+        </columns>
+
+    </TableView>
+    <Label text="FileTable" GridPane.rowIndex="1" GridPane.columnIndex="2" GridPane.halignment="CENTER"/>
+    <ListView fx:id="fileTableListView"
+              GridPane.rowIndex="2"
+              GridPane.columnIndex="2"/>
+
+    <Label text="OutputConsole" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.halignment="CENTER"/>
+    <ListView fx:id="outputConsoleListView"
+              GridPane.rowIndex="4"
+              GridPane.columnIndex="0"/>
+
+    <Label text="ExeStack" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.halignment="CENTER"/>
+    <ListView fx:id="executionStackListView"
+              GridPane.rowIndex="4"
+              GridPane.columnIndex="1"/>
+    <Label text="ProgramStatesList" GridPane.rowIndex="3" GridPane.columnIndex="2" GridPane.halignment="CENTER"/>
+    <ListView fx:id="programStatesListView"
+              GridPane.rowIndex="4"
+              GridPane.columnIndex="2" />
+    <Button fx:id="executeOneStepButton"
+            text="One step"
+            GridPane.rowIndex="5"
+            GridPane.columnIndex="1"  GridPane.halignment="CENTER"/>
+</children>
+</GridPane>
