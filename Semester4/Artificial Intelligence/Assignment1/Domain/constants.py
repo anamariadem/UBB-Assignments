@@ -9,6 +9,9 @@ WHITE = (255, 255, 255)
 primary_color = (0, 119, 237)
 secondary_color = (179, 211, 243)
 
+ROWS = 20
+COLUMNS = 20
+
 #define directions
 UP = 0
 DOWN = 2

@@ -1,51 +1,51 @@
 import pygame
 import numpy as np
-from Solution.constants import *
+from Domain.constants import *
 
 
-class DMap():
+class DroneMap():
     def __init__(self):
-        self.__n = 20
-        self.__m = 20
+        self.__n = ROWS
+        self.__m = COLUMNS
         self.surface = np.zeros((self.__n, self.__m))
         for i in range(self.__n):
             for j in range(self.__m):
                 self.surface[i][j] = -1
 
-    def markDetectedWalls(self, e, x, y):
+    def mark_detected_walls(self, e, x, y):
         #   To DO
         # mark on this map the wals that you detect
         if x is None and y is  None:
             return
 
-        wals = e.readUDMSensors(x, y)
+        walls = e.readUDMSensors(x, y)
         i = x - 1
-        if wals[UP] > 0:
-            while ((i >= 0) and (i >= x - wals[UP])):
+        if walls[UP] > 0:
+            while ((i >= 0) and (i >= x - walls[UP])):
                 self.surface[i][y] = 0
                 i = i - 1
         if (i >= 0):
             self.surface[i][y] = 1
 
         i = x + 1
-        if wals[DOWN] > 0:
-            while ((i < self.__n) and (i <= x + wals[DOWN])):
+        if walls[DOWN] > 0:
+            while ((i < self.__n) and (i <= x + walls[DOWN])):
                 self.surface[i][y] = 0
                 i = i + 1
         if (i < self.__n):
             self.surface[i][y] = 1
 
         j = y + 1
-        if wals[LEFT] > 0:
-            while ((j < self.__m) and (j <= y + wals[LEFT])):
+        if walls[LEFT] > 0:
+            while ((j < self.__m) and (j <= y + walls[LEFT])):
                 self.surface[x][j] = 0
                 j = j + 1
         if (j < self.__m):
             self.surface[x][j] = 1
 
         j = y - 1
-        if wals[RIGHT] > 0:
-            while ((j >= 0) and (j >= y - wals[RIGHT])):
+        if walls[RIGHT] > 0:
+            while ((j >= 0) and (j >= y - walls[RIGHT])):
                 self.surface[x][j] = 0
                 j = j - 1
         if (j >= 0):
@@ -69,6 +69,6 @@ class DMap():
                 elif (self.surface[i][j] == 0):
                     imagine.blit(empty, (j * 20, i * 20))
 
-        drona = pygame.image.load("drona.png")
+        drona = pygame.image.load("Images/drona.png")
         imagine.blit(drona, (y * 20, x * 20))
         return imagine

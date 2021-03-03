@@ -1,12 +1,12 @@
 import pickle,pygame
 from random import random, randint
 import numpy as np
-from Solution.constants import *
+from Domain.constants import *
 
 class Environment():
     def __init__(self):
-        self.__n = 20
-        self.__m = 20
+        self.__n = ROWS
+        self.__m = COLUMNS
         self.__surface = np.zeros((self.__n, self.__m))
 
     def randomMap(self, fill=0.2):
@@ -41,7 +41,7 @@ class Environment():
 
         return readings
 
-    def saveEnvironment(self, numFile):
+    '''def saveEnvironment(self, numFile):
         with open(numFile, 'wb') as f:
             pickle.dump(self, f)
             f.close()
@@ -52,7 +52,7 @@ class Environment():
             self.__n = dummy.__n
             self.__m = dummy.__m
             self.__surface = dummy.__surface
-            f.close()
+            f.close()'''
 
     def image(self, colour=BLUE, background=WHITE):
         imagine = pygame.Surface((420, 420))
