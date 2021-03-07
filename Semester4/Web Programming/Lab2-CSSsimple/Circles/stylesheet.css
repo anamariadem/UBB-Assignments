@@ -1,0 +1,48 @@
+.parent{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -300px;
+    margin-left: -300px;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: #CCCCFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.child{
+    position: absolute;
+    border-radius: 50%;
+}
+.child1{
+    width: 500px;
+    height: 500px;
+    background: #6495ED;
+}
+
+.child2{
+    width: 400px;
+    height: 400px;
+    background: #9FE2BF;
+}
+
+.child3{
+    width: 300px;
+    height: 300px;
+    background: #F9E79F ;
+}
+
+.child4{
+    width: 200px;
+    height: 200px;
+    background: #FFBF00;
+}
+
+.child5{
+    width: 100px;
+    height: 100px;
+    background: #E74C3C ;
+}

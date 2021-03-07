@@ -1,0 +1,261 @@
+header{
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+    background-color: black ;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.body-container{
+    padding-left: 150px;
+    padding-right: 150px;
+}
+
+.left-items{
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+    background-color: black ;
+    align-items: center;
+}
+
+.right-items{
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+    background-color: black ;
+    align-items: center;
+}
+
+.logo{
+    height: 40px;
+    width: 40px;
+    margin-left: 80px;
+}
+
+.search-logo{
+    height: 20px;
+    width: 20px;
+}
+
+.login-avatar{
+    height: 25px;
+    width: 25px;
+}
+
+.padding-small{
+    padding-left: 10px;
+}
+
+.padding-right{
+    padding-right: 3px;
+}
+
+.padding-right-medium{
+    padding-right: 20px;
+}
+
+.header-text{
+    color: white;
+    font-family: Arial, serif;
+    font-size: 16px;
+}
+
+.header-text-bold{
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.header-text-small{
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.white-line{
+    height: 2px;
+    width: 16px;
+    background-color: white;
+}
+
+.list-options{
+    display: flex;
+    height: 15px;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.padding-right-large{
+    padding-right: 50px;
+}
+
+.big-text{
+    font-family: "Helvetica Neue", sans-serif;
+    font-weight: 300;
+    font-size: 55px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.main-image{
+
+}
+
+.image-overlay{
+    height: 130px;
+    width: 780px;
+    background-color: rgba(255,255,255,0.5);
+    transform: translateY(-130px);
+}
+
+.image-text{
+    color: black;
+    font-family: "Helvetica Neue", sans-serif;
+    font-weight: 300;
+    font-size: 40px;
+}
+
+.image-text:hover{
+    color: red;
+}
+
+.article-titles{
+    display: flex;
+    flex-direction: column;
+    margin-top: -145px;
+}
+
+.article-text{
+    width: 780px;
+    font-family: "Helvetica Neue", sans-serif;
+    font-size: 20px;
+    font-weight: 300;
+}
+
+.article-text:hover{
+    color: red;
+}
+
+.grey-line-delimiter{
+    height: 1px;
+    background-color: gray;
+    opacity: 0.8;
+    width: 780px;
+}
+
+.one-line{
+    height: 3px;
+    background-color: gray;
+    opacity: 0.7;
+}
+
+.two-lines{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 8px;
+    justify-content: space-between;
+}
+
+.around-the-world{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.around-the-world-text{
+    font-family: "Helvetica Neue", sans-serif;
+    font-size: 22px;
+    font-weight: 300;
+    width: 200px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.world-news{
+    display: flex;
+    flex-direction: row;
+    height: 575px;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: space-between;
+    /*margin-top: 185px;*/
+}
+
+
+.europe-news{
+    display: flex;
+    flex-direction: column;
+    width: 33%;
+    padding-right: 4px;
+}
+
+.middle-east-news{
+    display: flex;
+    flex-direction: column;
+    width: 33%;
+    padding-right: 2px;
+    padding-left: 2px;
+    /*margin-top: -68px;*/
+}
+
+.africa-news{
+    display: flex;
+    flex-direction: column;
+    width: 33%;
+    padding-left: 4px;
+    /*margin-top: -183px;*/
+}
+
+.continent-text{
+    color: black;
+    font-family: "Helvetica Neue", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    align-items: center;
+}
+
+
+.news-title{
+    width: 330px;
+    color: black;
+    font-family: "Helvetica Neue", sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.news-title:hover{
+    color: red;
+}
+
+.smaller-grey-line-delimiter{
+    height: 1px;
+    background-color: gray;
+    opacity: 0.8;
+    width: 333px;
+}
+
+.europe-news-text{
+    width: 333px;
+    font-family: "Helvetica Neue", sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+}
+
+.europe-news-text:hover{
+    color: red;
+}
+
+/*.text-picture{*/
+/*    width: 333px;*/
+/*    height: 200px; !*188 has the picture*!*/
+/*    background-color: gray;*/
+/*    opacity: 0.3;*/
+/*    z-index: 20;*/
+/*}*/
+
+.news-picture{
+    height: 188px;
+    width: 100%;
+}

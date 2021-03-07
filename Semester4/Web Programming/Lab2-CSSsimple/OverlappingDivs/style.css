@@ -1,0 +1,77 @@
+.parent{
+    height: 100vh;
+    width: 100vw;
+}
+
+.div{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 200px;
+    width: 300px;
+    margin-top: -100px;
+    margin-left: -150px;
+    z-index: 10;
+    overflow: hidden;
+}
+
+div:hover .div4{
+    animation: moveBottomRight 5s;
+}
+
+@keyframes moveTopLeft {
+    from {top: 50%; left: 50%}
+    to {top: 0; left: 0; margin-left: 0; margin-top: 0;}
+}
+
+@keyframes moveTopRight {
+    from {top: 50%; left: 50%}
+    to {top: 0; left: 100%; margin-left: -300px; margin-top: 0;}
+}
+
+@keyframes moveBottomLeft {
+    from {top: 50%; left: 50%}
+    to {top: 100%; left: 0; margin-top: -200px; margin-left: 0;}
+}
+
+@keyframes moveBottomRight{
+    from {top: 50%; left: 50%}
+    to {top: 100%; left: 100%; margin-top: -200px; margin-left: -300px;}
+}
+
+.div1{
+    background: pink;
+}
+
+.div1:hover{
+    animation: moveTopLeft 5s;
+}
+
+div:hover .div1{
+    animation: moveTopLeft 5s;
+}
+
+.div2{
+    background: aquamarine;
+}
+
+div:hover .div2{
+    animation: moveTopRight 5s;
+}
+
+.div3{
+    background: blueviolet;
+}
+
+
+div:hover .div3{
+    animation: moveBottomLeft 5s;
+}
+
+.div4{
+    background: cyan;
+}
+
+div:hover .div4{
+    animation: moveBottomRight 5s;
+}
